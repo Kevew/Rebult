@@ -137,3 +137,34 @@ model CommentVote {
 
   @@id([userId, commentId])
 }
+
+model Paper {
+  paperId String @id @default(cuid())
+  id String // local pdf-highlighter hash
+
+  pdf String
+  highlights Highlight[]
+}
+
+model Highlight {
+  comment String
+  content String
+
+  highlightId String @id @default(cuid())
+  id String // local pdf-highlighter hash
+  
+  // Scaled (react-pdf-higlighter-with-categories/src/types.ts)
+  x1 Int
+  y1 Int
+
+  x2 Int
+  y2 Int
+
+  width Int
+  height Int
+
+  pageNumber  Int
+  // Scaled
+
+  paper Paper @relation(fields: [highlightId], references: [paperId])
+}
