@@ -96,6 +96,13 @@
   dependencies:
     "@codexteam/icons" "^0.0.6"
 
+"@effect/schema@^0.68.9":
+  version "0.68.12"
+  resolved "https://registry.yarnpkg.com/@effect/schema/-/schema-0.68.12.tgz#e530485e049a04eb0ce8698ea3294d2feac1afbb"
+  integrity sha512-UWJsFXzeYTBQYnftwI1KR2uaxIZ8fk+kffDS7BnJwnGjPPgODq3/AzeoBDSu1MAlnwBKOz+QRdMuSMxrT/pHig==
+  dependencies:
+    fast-check "^3.19.0"
+
 "@eslint-community/eslint-utils@^4.2.0":
   version "4.4.0"
   resolved "https://registry.npmjs.org/@eslint-community/eslint-utils/-/eslint-utils-4.4.0.tgz"
@@ -919,10 +926,36 @@
     "@typescript-eslint/types" "5.59.8"
     eslint-visitor-keys "^3.3.0"
 
-"@uploadthing/react@^4.0.0":
-  version "4.0.0"
-  resolved "https://registry.npmjs.org/@uploadthing/react/-/react-4.0.0.tgz"
-  integrity sha512-4EI9Q3qs/iRbV9JeuGD0B+AYd61mguH9/jVZwjC/H4i8nj2fhsNs1ILLUtdZUs+adcUYOBU2rt4ZjEoPofpxHg==
+"@uploadthing/dropzone@0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@uploadthing/dropzone/-/dropzone-0.4.1.tgz#826a33a89e665e5055c60934462ef39c0ab171e7"
+  integrity sha512-RHSpo/2kg/mrRSYQA4EKlyvkOCYWOeE2+QQYW9YiUvWCuawnTfD7DQvk8RN/nYXi1Sw7/v0NegmQpiVELVGtnA==
+  dependencies:
+    file-selector "^0.6.0"
+
+"@uploadthing/mime-types@0.2.10":
+  version "0.2.10"
+  resolved "https://registry.yarnpkg.com/@uploadthing/mime-types/-/mime-types-0.2.10.tgz#169edb30f1aa52f828e37acfe5121432493efe01"
+  integrity sha512-kz3F0oEgAyts25NAGXlUBCWh3mXonbSOQJFGFMawHuIgbUbnzXbe4w5WI+0XdneCbjNmikfWrdWrs8m/7HATfQ==
+
+"@uploadthing/react@^6.7.0":
+  version "6.7.0"
+  resolved "https://registry.yarnpkg.com/@uploadthing/react/-/react-6.7.0.tgz#bcc8301e80d070bb1030086cf840e745bef29e38"
+  integrity sha512-+jhIL7A1gZ/WA0e7N7PKo5Yhsn0RUU7u6aKvAfXzJ2/9NlNueCP7hMs+WXkZMIJMhW3Ch50qh2elYeFSgvV9NQ==
+  dependencies:
+    "@uploadthing/dropzone" "0.4.1"
+    "@uploadthing/shared" "6.7.6"
+    file-selector "^0.6.0"
+    tailwind-merge "^2.2.1"
+
+"@uploadthing/shared@6.7.6":
+  version "6.7.6"
+  resolved "https://registry.yarnpkg.com/@uploadthing/shared/-/shared-6.7.6.tgz#2ef69d4b8f18ab7fae4512148169a6092b3e03f8"
+  integrity sha512-mUwacb8Txy/DpLP4rhRhI9ktlXi8oXbr+OxfzMtCPk9gmXM1kQ3j1RBInsdtPc9Uwa4M6oMxjZoUmd7WTnX1fA==
+  dependencies:
+    "@uploadthing/mime-types" "0.2.10"
+    effect "3.4.2"
+    std-env "^3.7.0"
 
 "@upstash/redis@^1.21.0":
   version "1.21.0"
@@ -1322,6 +1355,11 @@ concat-map@0.0.1:
   resolved "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz"
   integrity sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==
 
+consola@^3.2.3:
+  version "3.2.3"
+  resolved "https://registry.yarnpkg.com/consola/-/consola-3.2.3.tgz#0741857aa88cfa0d6fd53f1cff0375136e98502f"
+  integrity sha512-I5qxpzLv+sJhTVEoLYNcTW+bThDCPsit0vLNKShZx6rLtpilNpmmeTPaeqJb9ZE9dV3DGaeby6Vuhrw38WjeyQ==
+
 cookie@^0.5.0:
   version "0.5.0"
   resolved "https://registry.npmjs.org/cookie/-/cookie-0.5.0.tgz"
@@ -1527,6 +1565,11 @@ editorjs-react-renderer@^3.5.1:
   dependencies:
     html-react-parser "^3.0.4"
     react "^18.2.0"
+
+effect@3.4.2:
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/effect/-/effect-3.4.2.tgz#6e39320ea69373e0a051f725e83fa202843db888"
+  integrity sha512-y20gL/fMqm4mUL71Tcuu3pYQ7Phm8RMX/hUt6vVfkg4Iac/RvMjP5DrJxT6RI0j0VNRLhTgb6pyL3oXeqxTeRg==
 
 electron-to-chromium@^1.4.411:
   version "1.4.419"
@@ -1887,6 +1930,13 @@ expand-template@^2.0.3:
   version "2.0.3"
   resolved "https://registry.npmjs.org/expand-template/-/expand-template-2.0.3.tgz"
   integrity sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==
+
+fast-check@^3.19.0:
+  version "3.19.0"
+  resolved "https://registry.yarnpkg.com/fast-check/-/fast-check-3.19.0.tgz#6a0b7cabc3aa82bc00967332de216c5452ff7ea5"
+  integrity sha512-CO2JX/8/PT9bDGO1iXa5h5ey1skaKI1dvecERyhH4pp3PGjwd3KIjMAXEg79Ps9nclsdt4oPbfqiAnLU0EwrAQ==
+  dependencies:
+    pure-rand "^6.1.0"
 
 fast-deep-equal@^3.1.1, fast-deep-equal@^3.1.3:
   version "3.1.3"
@@ -2662,7 +2712,7 @@ mime-db@1.52.0:
   resolved "https://registry.npmjs.org/mime-db/-/mime-db-1.52.0.tgz"
   integrity sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==
 
-mime-types@^2.1.12, mime-types@^2.1.35:
+mime-types@^2.1.12:
   version "2.1.35"
   resolved "https://registry.npmjs.org/mime-types/-/mime-types-2.1.35.tgz"
   integrity sha512-ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw==
@@ -3182,6 +3232,11 @@ punycode@^2.1.0:
   resolved "https://registry.npmjs.org/punycode/-/punycode-2.3.0.tgz"
   integrity sha512-rRV+zQD8tVFys26lAGR9WUuS4iUAngJScM+ZRSKtvl5tKeZ2t5bvdNFdNHBW9FWR4guGHlgmsZ1G7BSm2wTbuA==
 
+pure-rand@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/pure-rand/-/pure-rand-6.1.0.tgz#d173cf23258231976ccbdb05247c9787957604f2"
+  integrity sha512-bVWawvoZoBYpp6yIoQtQXHZjmz35RSVHnUOTefl8Vcjr8snTPY1wnpSPMWekcFwbxI6gtmT7rSYPFvz71ldiOA==
+
 queue-microtask@^1.2.2:
   version "1.2.3"
   resolved "https://registry.npmjs.org/queue-microtask/-/queue-microtask-1.2.3.tgz"
@@ -3489,6 +3544,11 @@ source-map-js@^1.0.2:
   resolved "https://registry.npmjs.org/source-map-js/-/source-map-js-1.0.2.tgz"
   integrity sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==
 
+std-env@^3.7.0:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/std-env/-/std-env-3.7.0.tgz#c9f7386ced6ecf13360b6c6c55b8aaa4ef7481d2"
+  integrity sha512-JPbdCEQLj1w5GilpiHAx3qJvFndqybBysA3qUOnznweH4QbNYUsW/ea8QzSrnh0vNsezMMw5bcVool8lM0gwzg==
+
 stop-iteration-iterator@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/stop-iteration-iterator/-/stop-iteration-iterator-1.0.0.tgz"
@@ -3635,7 +3695,7 @@ synckit@^0.8.5:
     "@pkgr/utils" "^2.3.1"
     tslib "^2.5.0"
 
-tailwind-merge@^2.3.0:
+tailwind-merge@^2.2.1, tailwind-merge@^2.3.0:
   version "2.3.0"
   resolved "https://registry.npmjs.org/tailwind-merge/-/tailwind-merge-2.3.0.tgz"
   integrity sha512-vkYrLpIP+lgR0tQCG6AP7zZXCTLc1Lnv/CCRT3BqJ9CZ3ui2++GPaGb1x/ILsINIMSYqqvrpqjUFsMNLlW99EA==
@@ -3826,12 +3886,17 @@ update-browserslist-db@^1.0.11:
     escalade "^3.1.1"
     picocolors "^1.0.0"
 
-uploadthing@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.npmjs.org/uploadthing/-/uploadthing-4.0.0.tgz"
-  integrity sha512-mgJaCcG+mDjNUcWmZCBdR+KZr2uucDVi0QL7q+S6zkZQ7g8SlOsFCPH9+Kp9G+iLfF/lOp/MjQZZPeIoiFHzvw==
+uploadthing@^6.13.0:
+  version "6.13.0"
+  resolved "https://registry.yarnpkg.com/uploadthing/-/uploadthing-6.13.0.tgz#2544f4177e88b73d3ba721eaca28142763a7a173"
+  integrity sha512-+ghFRvyp6YlkqH4FRF9Xz1Fb/tZtp50fEUGcckVAWz5Tl8qvOKhtL6GnlF6GIsp1NtBAV5o53jBF3ApfGYwJQg==
   dependencies:
-    mime-types "^2.1.35"
+    "@effect/schema" "^0.68.9"
+    "@uploadthing/mime-types" "0.2.10"
+    "@uploadthing/shared" "6.7.6"
+    consola "^3.2.3"
+    effect "3.4.2"
+    std-env "^3.7.0"
 
 uri-js@^4.2.2:
   version "4.4.1"

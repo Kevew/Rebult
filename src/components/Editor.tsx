@@ -77,12 +77,12 @@ const Editor: FC<EditorProps> = ({subredditId}) => {
                         uploader: {
                             async uploadByFile(file: File) {
                             // upload to uploadthing
-                            const [res] = await uploadFiles([file], 'imageUploader')
+                            const [res] = await uploadFiles('imageUploader', {files : [file]})
 
                             return {
                                 success: 1,
                                 file: {
-                                url: res.fileUrl,
+                                url: res.url,
                                 },
                             }
                             },
