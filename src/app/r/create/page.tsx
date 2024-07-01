@@ -43,6 +43,14 @@ const Page = () => {
           });
         }
 
+        if (err.response?.status === 420) {
+          return toast({
+            title: 'Unable to associate paper',
+            description: `Could not find paper with name "${paperName}".`,
+            variant: 'destructive',
+          });
+        }
+
         if (err.response?.status === 401) {
           return loginToast();
         }
