@@ -10,25 +10,35 @@ import axios, { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+import { UploadDropzone, uploadFiles } from "@/lib/uploadthing";
+
 const Page = () => {
   const router = useRouter();
   const [input, setInput] = useState<string>('');
   const { loginToast } = useCustomToasts();
 
-  const { mutate: createCommunity, isLoading } = useMutation({
-    mutationFn: async () => {
-      const payload: CreateSubredditPayload = {
-        name: input,
-      }
+  const [paper, setPaper] = useState<File | null>(null);
 
-      const { data } = await axios.post('/api/subreddit', payload);
+ 
+
+  const { mutate: createPaper, isLoading } = useMutation({
+    mutationFn: async () => {
+      let pdf = null
+      if (paper)
+        [pdf] = await uploadFiles("pdfUploader", { files: [paper] })
+
+      console.log(pdf)
+      
+      const payload = pdf ? { name : input, pdf: pdf.url} : { name: input }
+
+      const { data } = await axios.post('/api/paper', payload);
       return data as string;
     },
     onError: (err) => {
       if (err instanceof AxiosError) {
         if (err.response?.status === 409) {
           return toast({
-            title: 'Category already exists.',
+            title: 'Paper already exists.',
             description: 'Please choose a different name.',
             variant: 'destructive',
           });
@@ -36,7 +46,7 @@ const Page = () => {
 
         if (err.response?.status === 422) {
           return toast({
-            title: 'Invalid category name.',
+            title: 'Invalid paper name.',
             description: 'Please choose a name between 3 and 21 letters.',
             variant: 'destructive',
           });
@@ -55,7 +65,7 @@ const Page = () => {
     },
 
     onSuccess: (data) => {
-      router.push(`/r/${data}`)
+      router.push(`/p/${data}`)
     },
   })
 
@@ -63,7 +73,7 @@ const Page = () => {
     <div className='container flex items-center h-full max-w-3xl mx-auto'>
       <div className='relative bg-white w-full h-fit p-4 rounded-lg space-y-6'>
         <div className='flex justify-between items-center'>
-          <h1 className='text-xl font-semibold'>Create a Category</h1>
+          <h1 className='text-xl font-semibold'>Register a Paper</h1>
         </div>
 
         <hr className='bg-red-500 h-px' />
@@ -71,11 +81,11 @@ const Page = () => {
         <div>
           <p className='text-lg font-medium'>Name</p>
           <p className='text-xs pb-2'>
-            Category names including capitalization cannot be changed.
+            Paper name including capitalization cannot be changed.
           </p>
           <div className='relative'>
             <p className='absolute text-sm left-0 w-8 inset-y-0 grid place-items-center text-zinc-400'>
-              r/
+              p/
             </p>
             <Input
               value={input}
@@ -85,10 +95,31 @@ const Page = () => {
           </div>
         </div>
         <div>
-          <p className='text-lg font-medium'>Associated paper</p>
+          <p className='text-lg font-medium'>Paper pdf</p>
           <p className='text-xs pb-2'>
-            If no pdf is uploaded, then no paper will be associated. The associated paper cannot be changed.
+            Paper pdf cannot be changed.
           </p>
+          <UploadDropzone
+            endpoint="pdfUploader"
+            onClientUploadComplete={(res) => {
+              // Do something with the response
+              console.log("Files: ", res);
+              alert("Upload Completed");
+            }}
+            onUploadError={(error: Error) => {
+              alert(`ERROR! ${error.message}`);
+            }}
+            onUploadBegin={(name) => {
+              // Do something once upload begins
+              console.log("Uploading: ", name);
+            }}
+            onDrop={(acceptedFiles) => {
+              // Do something with the accepted files
+              console.log("Accepted files: ", acceptedFiles);
+              if (acceptedFiles.length > 0)
+                setPaper(acceptedFiles[0]);
+            }}
+          />
         </div>
         <div className='flex justify-end gap-4'>
           <Button
@@ -100,8 +131,8 @@ const Page = () => {
           <Button
             isLoading={isLoading}
             disabled={input.length === 0}
-            onClick={() => createCommunity()}>
-            Create Community
+            onClick={() => createPaper()}>
+            Register Paper
           </Button>
         </div>
       </div>

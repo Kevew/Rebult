@@ -49,6 +49,7 @@ model User {
   email             String?        @unique
   emailVerified     DateTime?
   createdSubreddits Subreddit[]    @relation("CreatedBy")
+  createdPapers     Paper[]        @relation("CreatedBy")
   subscriptions     Subscription[]
   votes             Vote[]
 
@@ -68,10 +69,14 @@ model Subreddit {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   posts     Post[]
+  higlights Highlight[]
 
   creatorId   String?
   Creator     User?          @relation("CreatedBy", fields: [creatorId], references: [id])
   subscribers Subscription[]
+
+  paperId String?
+  paper Paper? @relation("DiscussingBy", fields: [paperId], references: [id]) // multiple subreddits can discuss the same paper
 
   @@index([name])
 }
@@ -96,6 +101,8 @@ model Post {
   authorId    String
   subreddit   Subreddit @relation(fields: [subredditId], references: [id])
   subredditId String
+
+  highlight Highlight? @relation("AttachTo")
 
   comments    Comment[] 
   votes       Vote[]
@@ -139,16 +146,22 @@ model CommentVote {
 }
 
 model Paper {
-  paperId String @id @default(cuid())
-  id String // local pdf-highlighter hash
+  id String @id @default(cuid())
 
+  creator User @relation("CreatedBy", fields:[creatorId], references: [id])
+  creatorId String
+
+  name String @unique
   pdf String
-  highlights Highlight[]
+  subreddits Subreddit[] @relation("DiscussingBy")
 }
 
 model Highlight {
-  comment String
   content String
+
+  post Post @relation("AttachTo", fields: [postId], references: [id])
+  postId String @unique
+
 
   highlightId String @id @default(cuid())
   id String // local pdf-highlighter hash
@@ -166,5 +179,6 @@ model Highlight {
   pageNumber  Int
   // Scaled
 
-  paper Paper @relation(fields: [highlightId], references: [paperId])
+  subreddit Subreddit @relation(fields: [subredditId], references: [id])
+  subredditId String
 }

@@ -1,6 +1,6 @@
 import { getAuthSession } from '@/lib/auth'
 import { db } from '@/lib/db'
-import { SubredditValidator } from '@/lib/validators/subreddit'
+import { PaperValidator } from '@/lib/validators/paper'
 import { z } from 'zod'
 
 export async function POST(req: Request) {
@@ -13,10 +13,10 @@ export async function POST(req: Request) {
         }
 
         const body = await req.json();
-        const { name, paperId } = SubredditValidator.parse(body);
+        const { name, pdf } = PaperValidator.parse(body);
 
         // check if subreddit already exists
-        const subredditExists = await db.subreddit.findFirst({
+        const subredditExists = await db.paper.findFirst({
         where: {
             name,
         },
@@ -27,28 +27,21 @@ export async function POST(req: Request) {
         return new Response('Subreddit already exists', { status: 409 })
         }
 
-        const data = paperId ? 
-            { name, creatorId: session.user.id, paperId } :
-            { name, creatorId: session.user.id }
-
-
         // create subreddit and associate it with the user
-        const subreddit = await db.subreddit.create({ data })
-
-        // creator also has to be subscribed
-        await db.subscription.create({
+        const paper = await db.paper.create({
         data: {
-            userId: session.user.id,
-            subredditId: subreddit.id,
+            pdf,
+            name,
+            creatorId: session.user.id,
         },
         })
 
-        return new Response(subreddit.name)
+        return new Response(paper.name)
     } catch (error) {
         if (error instanceof z.ZodError) {
         return new Response(error.message, { status: 422 })
         }
 
-        return new Response('Could not create subreddit', { status: 500 })
+        return new Response('Could not create paper', { status: 500 })
     }
 }

@@ -40,6 +40,13 @@ export default async function Home() {
                       href={`/r/create`}>
                       Create Community
                     </Link>
+                    <Link
+                      className={buttonVariants({
+                        className: 'w-full mt-4 mb-6',
+                      })}
+                      href={`/p/create`}>
+                      Register Paper
+                    </Link>
                   </dl>
               </div>
           </div>

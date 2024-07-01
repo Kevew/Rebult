@@ -10,6 +10,7 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@argument-studio/react-pdf-highlighter-with-categories": "file:.\\react-pdf-highlighter-with-categories\\",
     "@editorjs/code": "^2.8.0",
     "@editorjs/editorjs": "^2.27.0",
     "@editorjs/embed": "^2.5.3",
