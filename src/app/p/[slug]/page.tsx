@@ -40,7 +40,12 @@ const page = async ({params}: pageProps) => {
 
     return(
         <>
-            <h1>{paper.name}</h1>
+            <h1 className='font-bold text-3xl md:text-4xl h-14'>
+                p/{paper.name}
+            </h1>
+            <hr className='bg-red-500 h-px' />
+            <p className='text-lg font-medium'>Associated Subreddits: </p>
+            <ul>{paper.subreddits.map((s) => <li>{s.name}</li>)}</ul>
             <PaperDisplay name={paper.name} pdf={paper.pdf}/>
         </>
     )

@@ -15,11 +15,12 @@ const Page = () => {
   const [input, setInput] = useState<string>('');
   const { loginToast } = useCustomToasts();
 
+  const [associatePaper, setAssociatePaper] = useState<boolean>(false);
+  const [paperName, setPaperName] = useState<string>('');
+
   const { mutate: createCommunity, isLoading } = useMutation({
     mutationFn: async () => {
-      const payload: CreateSubredditPayload = {
-        name: input,
-      }
+      const payload: CreateSubredditPayload = associatePaper ? { name: input, paperName } : { name: input } 
 
       const { data } = await axios.post('/api/subreddit', payload);
       return data as string;
@@ -85,10 +86,14 @@ const Page = () => {
           </div>
         </div>
         <div>
-          <p className='text-lg font-medium'>Associated paper</p>
+          <p className='text-lg font-medium'>Associate a paper</p>
           <p className='text-xs pb-2'>
-            If no pdf is uploaded, then no paper will be associated. The associated paper cannot be changed.
+            The paper associated to a subreddit cannot be changed. Subreddits can be created without associating a paper.
           </p>
+          <Input type="checkbox" onClick={() => setAssociatePaper(prev => !prev)} className='pl-6' />
+          {associatePaper && 
+            <Input value={paperName} onChange={(e) => setPaperName(e.target.value)} className='pl-6' />}
+
         </div>
         <div className='flex justify-end gap-4'>
           <Button
@@ -99,7 +104,7 @@ const Page = () => {
           </Button>
           <Button
             isLoading={isLoading}
-            disabled={input.length === 0}
+            disabled={input.length === 0 || associatePaper && paperName.length === 0}
             onClick={() => createCommunity()}>
             Create Community
           </Button>
