@@ -102,8 +102,6 @@ model Post {
   subreddit   Subreddit @relation(fields: [subredditId], references: [id])
   subredditId String
 
-  highlight Highlight? @relation("AttachTo")
-
   comments    Comment[] 
   votes       Vote[]
 }
@@ -114,7 +112,7 @@ model Comment {
   createdAt DateTime @default(now())
   author    User     @relation(fields: [authorId], references: [id])
   authorId  String
-  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post      Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId    String
 
   replyToId String?
@@ -157,27 +155,14 @@ model Paper {
 }
 
 model Highlight {
-  content String
+  id String @id @default(cuid())
 
-  post Post @relation("AttachTo", fields: [postId], references: [id])
-  postId String @unique
+  comment Json?
 
-
-  highlightId String @id @default(cuid())
-  id String // local pdf-highlighter hash
-  
-  // Scaled (react-pdf-higlighter-with-categories/src/types.ts)
-  x1 Int
-  y1 Int
-
-  x2 Int
-  y2 Int
-
-  width Int
-  height Int
+  content Json?
+  position Json?
 
   pageNumber  Int
-  // Scaled
 
   subreddit Subreddit @relation(fields: [subredditId], references: [id])
   subredditId String

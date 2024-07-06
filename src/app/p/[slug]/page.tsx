@@ -45,8 +45,12 @@ const page = async ({params}: pageProps) => {
             </h1>
             <hr className='bg-red-500 h-px' />
             <p className='text-lg font-medium'>Associated Subreddits: </p>
-            <ul>{paper.subreddits.map((s) => <li>{s.name}</li>)}</ul>
-            <PaperDisplay name={paper.name} pdf={paper.pdf}/>
+            <ul>{paper.subreddits.map((s) => <li><a
+                className='underline text-zinc-900 text-sm underline-offset-2'
+                href={`/r/${s.name}`}>
+                r/{s.name}
+            </a></li>)}</ul>
+            <PaperDisplay name={paper.name} pdf={paper.pdf} initialHighlights={[]}/>
         </>
     )
 }
