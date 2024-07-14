@@ -19,8 +19,8 @@ const Layout = async ({children, params: { slug }}
         include: {
             posts: {
                 include: {
-                author: true,
-                votes: true,
+                    author: true,
+                    votes: true,
                 },
             },
         },
@@ -29,12 +29,12 @@ const Layout = async ({children, params: { slug }}
     const subscription = !session?.user ? undefined
         : await db.subscription.findFirst({
             where: {
-            subreddit: {
-                name: slug,
-            },
-            user: {
-                id: session.user.id,
-            },
+                subreddit: {
+                    name: slug,
+                },
+                user: {
+                    id: session.user.id,
+                },
             },
         });
 

@@ -8,10 +8,11 @@ import Link from 'next/link';
 import { signOut } from 'next-auth/react';
 
 interface UserAccountNavProps {
-    user: Pick<User, 'name' | 'image' | 'email'>
+    user: Pick<User, 'name' | 'image' | 'email'>,
+    username: string | null | undefined
 }
 
-const UserAccountNav: FC<UserAccountNavProps> = ({user}) => {
+const UserAccountNav: FC<UserAccountNavProps> = ({user, username}) => {
     return(
         <DropdownMenu>
             <DropdownMenuTrigger>
@@ -34,6 +35,13 @@ const UserAccountNav: FC<UserAccountNavProps> = ({user}) => {
                 </div>
 
                 <DropdownMenuSeparator />
+
+                {username ?
+                    <DropdownMenuItem asChild>
+                        <Link href={'/profile/' + username}>Profile</Link>
+                    </DropdownMenuItem> : <></>
+                }
+                
 
                 <DropdownMenuItem asChild>
                     <Link href='/'>Feed</Link>
