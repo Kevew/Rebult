@@ -1,9 +1,10 @@
 'use client'
 
 import { User } from '@prisma/client';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import UserAvatar from '../UserAvatar';
 import AboutMe from './AboutMe';
+import EditAboutMe from './EditAboutMe';
 
 interface UserProfileViewProps {
     profile: User
@@ -13,21 +14,22 @@ const UserProfileView: FC<UserProfileViewProps> = ({profile}: UserProfileViewPro
 
     const [showAboutMeEdit, setShowAboutMeEdit] = useState(false);
 
-    const openAboutMeEdit = () => {
-        setShowAboutMeEdit(true);
-    }
-    const closeAboutMeEdit = () => {
-        setShowAboutMeEdit(false);
-    }
+    // Disable Scrolling and Sent to top of page
+    useEffect(() => {
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
+        document.body.style.overflow = (showAboutMeEdit ? "hidden" : "unset")
+    }, [showAboutMeEdit]);
 
     return(
         <div className='container flex flex-col h-full bg-slate-50'>
             {showAboutMeEdit ? 
             <div className='z-10 absolute top-0 left-1/2 transform -translate-x-1/2 w-full h-full bg-gray-200 bg-opacity-50'>
-                <span onClick={() => closeAboutMeEdit()}
+                <span onClick={() => setShowAboutMeEdit(false)}
                       className='z-15 absolute top-0 right-2 text-6xl font-extrabold cursor-pointer color-white'>&times;</span>
-                <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 transform -translate-y-1/2 border-4 border-white rounded w-1/2 h-3/4'>
-                    {/* This would be a component on About Me Edit. */}
+                <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 transform -translate-y-1/2 w-1/2 h-3/5'>
+                    {/* @ts-ignore-error */}
+                    <EditAboutMe description={profile.aboutMeDescription}
+                                 closeWindow={() => setShowAboutMeEdit(false)}/>
                 </div>
             </div>:<></>}
             <div className='relative flex flex-row w-full'>
@@ -50,7 +52,7 @@ const UserProfileView: FC<UserProfileViewProps> = ({profile}: UserProfileViewPro
                         <AboutMe 
                             profile={profile} 
                             editable={true}
-                            callParent={openAboutMeEdit}
+                            callParent={() => setShowAboutMeEdit(true)}
                         />
                     </div>
                 </div>

@@ -1,5 +1,5 @@
 import { User } from '@prisma/client';
-import { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import EditIcon from '../../../public/Edit.svg';
 import Image from 'next/image';
 
@@ -13,6 +13,14 @@ const AboutMe: FC<AboutMeProps> = ({profile, editable, callParent}: AboutMeProps
 
 
     const aboutMeRef = useRef<HTMLParagraphElement>(null);
+
+    const description = profile.aboutMeDescription!;
+    const formattedText = description.split('\n').map((line, index) => (
+        <React.Fragment key={index}>
+          {line}
+          <br />
+        </React.Fragment>
+      ));
 
 
     const [clientHeight, setClientHeight] = useState(0);
@@ -52,7 +60,7 @@ const AboutMe: FC<AboutMeProps> = ({profile, editable, callParent}: AboutMeProps
             <p className='font-bold'>About Me</p>
             <p className='text-xs max-h-32 overflow-y-hidden overflow-x-hidden break-words'
                 ref={aboutMeRef}>
-                {profile.aboutMeDescription}
+                {formattedText}
                 {/* @ts-ignore-error */}
                 {clientHeight >= 128 ? (
                     // blur bottom if content is too long
