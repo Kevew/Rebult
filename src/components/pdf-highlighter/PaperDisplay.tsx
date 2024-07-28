@@ -4,11 +4,17 @@ import {
     PdfLoader,
     PdfHighlighter,
     Tip,
-    Highlight,
     Popup,
     AreaHighlight,
-    IHighlight, NewHighlight
+   NewHighlight,
+   ScaledPosition,
+   Content,
+   Comment
   } from "@argument-studio/react-pdf-highlighter-with-categories";
+
+import { Subreddit, User } from "@prisma/client";
+
+import { Highlight } from "./Highlight";
 
 import { Sidebar } from "./Sidebar";
 
@@ -18,6 +24,26 @@ const parseIdFromHash = () =>
 const resetHash = () => {
   document.location.hash = "";
 };
+
+// compute categorylabels from a labelMap
+const getCategoryLabels : (x : Map<string, string>) => {label : string, background : string}[] = 
+(x) => (
+  Array.from(x).map(
+    ([key, value]) => ({label : key, background : value})
+  )
+)
+
+const getRandomColor : () => string = () => "#" + Math.floor(Math.random()*16777215).toString(16);
+
+interface IHighlight {
+  position: ScaledPosition,
+  content: Content,
+  comment: Comment
+  subreddit: Subreddit,
+  author: User,
+  id : string
+}
+
 
 const HighlightPopup = ({
   comment,
@@ -36,31 +62,37 @@ const HighlightPopup = ({
   import * as React from "react"
 
   interface PaperProps {
-    name : string
-    pdf : string
+    name : string,
+    pdf : string,
     initialHighlights: ExtendedHighlight[],
-    subredditName? : string
+    subreddit : Subreddit,
+    user: User
   }
 
   interface State {
     data: Uint8Array | null;
     highlights: Array<IHighlight>;
-    categoryLabels: Array<{ label: string; background: string }>;
+    labelMap: Map<string, string>;
     destinationPage: number;
     pageCount: number;
     currentPage: number;
     flag: boolean;
   }
 
-  export const PaperDisplay : FC<PaperProps> = ({name, pdf, initialHighlights, subredditName}) => {
+  export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlights, subreddit}) => {
     const [state, setState] = React.useState<State>({
       data: null,
       highlights: initialHighlights as IHighlight[],
-      categoryLabels: [
-        { label: "Assumption", background: "#95c7e0" },
-        { label: "Premise", background: "#609b91" },
-        { label: "Target", background: "#ce7e8b" },
-      ],
+      labelMap: (() => {
+        let lol = new Map();
+        initialHighlights.map((x) => {
+          if (!lol.has(x))
+            lol.set(x.author.id, getRandomColor())
+        })
+        if (!lol.has(user.id))
+          lol.set(user.id, getRandomColor())
+        return lol
+      })(),
       destinationPage: 1,
       pageCount: 0,
       currentPage: 1,
@@ -78,7 +110,11 @@ const HighlightPopup = ({
   
     const setCategoryLabels = (update: { label: string; background: string }[]) => {
       setState((prev) => {
-        return { ...prev, categoryLabels: update };
+        const newMap = new Map(prev.labelMap);
+        if (newMap.has(user.id))
+          newMap.set(user.id, getRandomColor());
+        return { ...prev, labelMap : newMap};
+
       });
     };
   
@@ -110,14 +146,16 @@ const HighlightPopup = ({
     function addHighlight(highlight: NewHighlight) {
   
       console.log("Saving highlight", highlight);
+      console.log(state.labelMap)
   
       setState((prev) => {
         const { highlights } = prev;
         console.log("Saving highlight", highlight);
         commentRefs.current.push(React.createRef<HTMLLIElement>())
+        console.log(user)
         return {
           ...prev,
-          highlights: [{ ...highlight, id: getNextId() }, ...highlights],
+          highlights: [{ ...highlight, id: user.id, author: user, subreddit: subreddit }, ...highlights],
         }
       });
     }
@@ -238,10 +276,10 @@ const HighlightPopup = ({
         </div>
         <Sidebar
           highlightRefs={commentRefs}
-          highlights={highlights}
+          highlights={highlights as IHighlight[]}
           resetHighlights={resetHighlights}
           toggleDocument={() => {}}
-          categoryLabels={state.categoryLabels}
+          categoryLabels={getCategoryLabels(state.labelMap)}
           setCategoryLabels={setCategoryLabels}
           setPdfUrl={(url) => {
             setState((prev) => ({ ...prev, url, data: null, highlights: [] }));
@@ -260,7 +298,7 @@ const HighlightPopup = ({
           <PdfLoader url={pdf} beforeLoad={<></>/*<Spinner />*/} data={data}>
             {(pdfDocument) => (
               <PdfHighlighter
-                categoryLabels={state.categoryLabels}
+                categoryLabels={getCategoryLabels(state.labelMap)}
                 pdfDocument={pdfDocument}
                 enableAreaSelection={(event) => event.altKey}
                 onScrollChange={resetHash}
@@ -287,6 +325,7 @@ const HighlightPopup = ({
                   <Tip
                     onOpen={transformSelection}
                     onConfirm={(comment) => {
+                      console.log("wtf")
                       addHighlight({ content, position, comment });
   
                       hideTipAndSelection();
@@ -303,6 +342,7 @@ const HighlightPopup = ({
                   screenshot,
                   isScrolledTo
                 ) => {
+                  console.log(state.highlights)
                   const isTextHighlight = !Boolean(
                     highlight.content && highlight.content.image
                   );
@@ -312,8 +352,9 @@ const HighlightPopup = ({
                       isScrolledTo={isScrolledTo}
                       position={highlight.position}
                       comment={highlight.comment}
-                      categoryLabels={state.categoryLabels}
+                      categoryLabels={getCategoryLabels(state.labelMap)}
                       pointerEvents={state.flag}
+                      authorId={highlight.author ? highlight.author.id : user.id}
                       onClick={() => { console.log(getHighlightIndex(highlight.id)); console.log(commentRefs); commentRefs.current[getHighlightIndex(highlight.id)].current?.scrollIntoView() }}
                     />
                   ) : (
@@ -328,7 +369,7 @@ const HighlightPopup = ({
                         );
                       }}
                       comment={highlight.comment}
-                      categoryLabels={state.categoryLabels}
+                      categoryLabels={getCategoryLabels(state.labelMap)}
                     />
                   );
   

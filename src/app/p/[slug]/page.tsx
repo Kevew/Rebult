@@ -5,7 +5,7 @@ import { getAuthSession } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { notFound } from 'next/navigation';
 
-import { PaperDisplay } from '@/components/PaperDisplay'
+import { PaperDisplay } from '@/components/pdf-highlighter/PaperDisplay'
 
 interface pageProps {
     params: {
@@ -50,7 +50,7 @@ const page = async ({params}: pageProps) => {
                 href={`/r/${s.name}`}>
                 r/{s.name}
             </a></li>)}</ul>
-            <PaperDisplay name={paper.name} pdf={paper.pdf} initialHighlights={[]}/>
+            <PaperDisplay name={paper.name} pdf={paper.pdf} initialHighlights={[]} user={session?.user}/>
         </>
     )
 }
