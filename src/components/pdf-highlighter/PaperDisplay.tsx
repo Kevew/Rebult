@@ -3,7 +3,6 @@
 import {
     PdfLoader,
     PdfHighlighter,
-    Tip,
     Popup,
     AreaHighlight,
    NewHighlight,
@@ -11,6 +10,8 @@ import {
    Content,
    Comment
   } from "@argument-studio/react-pdf-highlighter-with-categories";
+
+import { Tip } from "./Tip"
 
 import { Subreddit, User } from "@prisma/client";
 
