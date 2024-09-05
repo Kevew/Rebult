@@ -27,13 +27,18 @@ export async function POST(req: Request) {
         return new Response('Subreddit already exists', { status: 409 })
         }
 
-        // create subreddit and associate it with the user
+        const subreddit = await db.subreddit.create({
+            data: {
+                name
+            }
+        })
         const paper = await db.paper.create({
-        data: {
-            pdf,
-            name,
-            creatorId: session.user.id,
-        },
+            data: {
+                pdf,
+                name,
+                creatorId: session.user.id,
+                subredditId: subreddit.id
+            },
         })
 
         return new Response(paper.name)

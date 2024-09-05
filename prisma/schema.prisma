@@ -63,6 +63,7 @@ model User {
   accounts    Account[]
   sessions    Session[]
   Post        Post[]
+  Highlight   Highlight[]
   Comment     Comment[]
   CommentVote CommentVote[]
 }
@@ -79,8 +80,7 @@ model Subreddit {
   Creator     User?          @relation("CreatedBy", fields: [creatorId], references: [id])
   subscribers Subscription[]
 
-  paperId String?
-  paper Paper? @relation("DiscussingBy", fields: [paperId], references: [id]) // multiple subreddits can discuss the same paper
+  paper Paper? // subreddit can only have one paper
 
   @@index([name])
 }
@@ -155,18 +155,20 @@ model Paper {
 
   name String @unique
   pdf String
-  subreddits Subreddit[] @relation("DiscussingBy")
+  subreddit Subreddit @relation(fields: [subredditId], references: [id]) // each paper can only have one subreddit pointing to it
+  subredditId String @unique // no two papers can have the same subreddit
+  // therefore, for each subreddit there is at most one paper, and no two subreddits can share the same paper
 }
 
 model Highlight {
   id String @id @default(cuid())
+  
+  user User @relation(fields: [userId], references: [id])
+  userId String
 
-  comment Json?
-
-  content Json?
-  position Json?
-
-  pageNumber  Int
+  comment Json
+  content Json
+  position Json
 
   subreddit Subreddit @relation(fields: [subredditId], references: [id])
   subredditId String

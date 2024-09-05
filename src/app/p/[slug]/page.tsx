@@ -22,18 +22,8 @@ const page = async ({params}: pageProps) => {
     const paper = await db.paper.findFirst({
         where: {name: slug},
         include: {
-            subreddits: {
-                include: {
-                    Creator: true,
-                    paper: true,
-                },
-                orderBy: {
-                    createdAt: 'desc',
-                },
-
-                take: INFINITE_SCROLLING_PAGINATION_RESULTS,
-            },
-        },
+            subreddit: {}
+        }
     })
 
     if(!paper) return notFound()
@@ -44,12 +34,12 @@ const page = async ({params}: pageProps) => {
                 p/{paper.name}
             </h1>
             <hr className='bg-red-500 h-px' />
-            <p className='text-lg font-medium'>Associated Subreddits: </p>
-            <ul>{paper.subreddits.map((s) => <li><a
+            <p className='text-lg font-medium'>Associated Subreddit: </p>
+            <a
                 className='underline text-zinc-900 text-sm underline-offset-2'
-                href={`/r/${s.name}`}>
-                r/{s.name}
-            </a></li>)}</ul>
+                href={`/r/${paper.subreddit.name}`}>
+                r/{paper.subreddit.name}
+            </a>
             <PaperDisplay name={paper.name} pdf={paper.pdf} initialHighlights={[]} user={session?.user}/>
         </>
     )
