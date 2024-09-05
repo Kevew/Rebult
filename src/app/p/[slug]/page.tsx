@@ -6,6 +6,7 @@ import { db } from '@/lib/db';
 import { notFound } from 'next/navigation';
 
 import { PaperDisplay } from '@/components/pdf-highlighter/PaperDisplay'
+import { ExtendedHighlight } from '@/types/db';
 
 interface pageProps {
     params: {
@@ -22,7 +23,15 @@ const page = async ({params}: pageProps) => {
     const paper = await db.paper.findFirst({
         where: {name: slug},
         include: {
-            subreddit: {}
+            subreddit: {
+                include: {
+                    highlights: {
+                        include: {
+                            author: true
+                        }
+                    }
+                }
+            }
         }
     })
 
@@ -40,7 +49,7 @@ const page = async ({params}: pageProps) => {
                 href={`/r/${paper.subreddit.name}`}>
                 r/{paper.subreddit.name}
             </a>
-            <PaperDisplay name={paper.name} pdf={paper.pdf} initialHighlights={[]} user={session?.user}/>
+            <PaperDisplay name={paper.name} pdf={paper.pdf} initialHighlights={paper.subreddit.highlights as ExtendedHighlight[]} user={session?.user} subreddit={paper.subreddit}/>
         </>
     )
 }

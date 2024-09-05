@@ -32,12 +32,20 @@ export async function POST(req: Request) {
                 name
             }
         })
+        
         const paper = await db.paper.create({
             data: {
                 pdf,
                 name,
                 creatorId: session.user.id,
                 subredditId: subreddit.id
+            },
+        })
+
+        await db.subscription.create({
+            data: {
+                userId: session.user.id,
+                subredditId: subreddit.id,
             },
         })
 
