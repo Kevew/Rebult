@@ -13,7 +13,7 @@ export async function POST(req: Request) {
         }
 
         const body = await req.json();
-        const { name, paperName } = SubredditValidator.parse(body);
+        const { name } = SubredditValidator.parse(body);
 
         // check if subreddit already exists
         const subredditExists = await db.subreddit.findFirst({
@@ -27,22 +27,7 @@ export async function POST(req: Request) {
         return new Response('Subreddit already exists', { status: 409 })
         }
         
-        let data;
-
-        if (paperName !== undefined){
-            const paperExists = await db.paper.findFirst({
-                    where: {
-                        name: paperName,
-                    }
-            })
-
-            if (!paperExists)
-                return new Response('Paper you are trying to associate could not be found', { status: 420 })
-            data = { name, creatorId: session.user.id, paperId: paperExists.id}
-        }
-        else
-            data = { name, creatorId: session.user.id }
-
+        const data = { name, creatorId: session.user.id }
 
         // create subreddit and associate it with the user
         const subreddit = await db.subreddit.create({ data })

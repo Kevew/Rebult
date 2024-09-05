@@ -15,12 +15,9 @@ const Page = () => {
   const [input, setInput] = useState<string>('');
   const { loginToast } = useCustomToasts();
 
-  const [associatePaper, setAssociatePaper] = useState<boolean>(false);
-  const [paperName, setPaperName] = useState<string>('');
-
   const { mutate: createCommunity, isLoading } = useMutation({
     mutationFn: async () => {
-      const payload: CreateSubredditPayload = associatePaper ? { name: input, paperName } : { name: input } 
+      const payload: CreateSubredditPayload = { name: input } 
 
       const { data } = await axios.post('/api/subreddit', payload);
       return data as string;
@@ -39,14 +36,6 @@ const Page = () => {
           return toast({
             title: 'Invalid category name.',
             description: 'Please choose a name between 3 and 21 letters.',
-            variant: 'destructive',
-          });
-        }
-
-        if (err.response?.status === 420) {
-          return toast({
-            title: 'Unable to associate paper',
-            description: `Could not find paper with name "${paperName}".`,
             variant: 'destructive',
           });
         }
@@ -93,16 +82,6 @@ const Page = () => {
             />
           </div>
         </div>
-        <div>
-          <p className='text-lg font-medium'>Associate a paper</p>
-          <p className='text-xs pb-2'>
-            The paper associated to a subreddit cannot be changed. Subreddits can be created without associating a paper.
-          </p>
-          <Input type="checkbox" onClick={() => setAssociatePaper(prev => !prev)} className='pl-6' />
-          {associatePaper && 
-            <Input value={paperName} onChange={(e) => setPaperName(e.target.value)} className='pl-6' />}
-
-        </div>
         <div className='flex justify-end gap-4'>
           <Button
             disabled={isLoading}
@@ -112,7 +91,7 @@ const Page = () => {
           </Button>
           <Button
             isLoading={isLoading}
-            disabled={input.length === 0 || associatePaper && paperName.length === 0}
+            disabled={input.length === 0}
             onClick={() => createCommunity()}>
             Create Community
           </Button>
