@@ -9,7 +9,7 @@ import {
    ScaledPosition,
    Content,
    Comment
-  } from "@argument-studio/react-pdf-highlighter-with-categories";
+  } from "../../../react-pdf-highlighter-with-categories";
 
 import { Tip } from "./Tip"
 
