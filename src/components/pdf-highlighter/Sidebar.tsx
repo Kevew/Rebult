@@ -16,7 +16,7 @@ export function Sidebar({
   highlightRefs
 }: Props) {
   return (
-    <div className="sidebar" style={{ width: "25vw" }}>
+    <div className="sidebar" style={{width:"20vw", marginRight:"1rem"}}>
       <div style={{ padding: "1rem" }}>
         <div className="description">
           <h2 style={{ marginBottom: "1rem" }}>react-pdf-highlighter</h2>
