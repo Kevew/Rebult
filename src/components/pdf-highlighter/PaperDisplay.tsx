@@ -238,7 +238,7 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
 
   return (
     <div className="App" style={{overflow:"hidden", display:"flex", flexDirection:"column"}}>
-      <Button className="bg-gray-400 text-zinc-700 hover:bg-gray-300 self-end" onClick={() => setState(prev => ({ ...prev, flag: !prev.flag }))}>toggle mode {state.flag ? "view only" : "suggest only"}</Button>
+      <Button className="bg-gray-400 text-zinc-700 hover:bg-gray-300 self-flexend" onClick={() => setState(prev => ({ ...prev, flag: !prev.flag }))}>toggle mode {state.flag ? "view only" : "suggest only"}</Button>
       <div
         style={{
           display: "flex",
