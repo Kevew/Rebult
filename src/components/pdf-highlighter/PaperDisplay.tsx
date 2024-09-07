@@ -260,6 +260,7 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
         </Button>
         <Button
           className="bg-gray-400 text-zinc-700 h-0.5 hover:bg-gray-300"
+          disabled
         >
           {"Current page: " + state.currentPage}
         </Button>
@@ -279,6 +280,7 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
         </Button>
         <Button
           className="bg-gray-400 text-zinc-700 h-0.5 hover:bg-gray-300"
+          disabled
         >
           {"Pages: " + state.pageCount}
         </Button>
