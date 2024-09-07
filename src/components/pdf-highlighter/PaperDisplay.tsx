@@ -26,6 +26,7 @@ import { ExtendedHighlight } from "@/types/db";
 import { FC } from "react"
 import * as React from "react"
 import axios from "axios";
+import { toast } from "@/hooks/use-toast";
 
 const getNextId = () => String(Math.random()).slice(2);
 const parseIdFromHash = () =>
@@ -149,13 +150,34 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
   }
 
   const { mutate: createHighlight, isLoading } = useMutation({
-    mutationFn : async (highlight : NewHighlight) => {
+    mutationFn : async ({ highlight, id } : {highlight : NewHighlight; id : string}) => {
       console.log(subreddit)
       const payload = {
         highlight : highlight,
         subredditId : subreddit.id
       }
-      const { data } = await axios.post('/api/paper/highlight/create', payload)
+      try {
+        const { data } = await axios.post('/api/paper/highlight/create', payload)
+      } catch (e) {
+        throw id;
+      }
+    },
+    onError: (id : string) => {
+      setState(prev => {
+        const index = getHighlightIndex(id)
+        // TODO:: in the future have some sort flag (maybe highlight in the sidebar) instead of outright deleting the highlight
+        return {
+          ...prev,
+          highlights: state.highlights.slice(0, index).concat(state.highlights.slice(index + 1)),
+        }
+      })
+      return toast({
+          title: "Something went wrong!",
+          description: "You're highlight was not published, please try again later. Your highlight will now be deleted from the viewer",
+          variant: "destructive"
+      })
+    },
+    onSuccess: () => {
     }
   })
 
@@ -164,7 +186,9 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
     console.log("Saving highlight", highlight);
     console.log(state.labelMap)
 
-    createHighlight(highlight)
+    const id = getNextId()
+
+    createHighlight({ highlight, id})
 
     setState((prev) => {
       const { highlights } = prev;
@@ -173,7 +197,7 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
       console.log(user)
       return {
         ...prev,
-        highlights: [{ ...highlight, id: user.id, author: user, subreddit: subreddit }, ...highlights],
+        highlights: [{ ...highlight, id, author: user, subreddit: subreddit }, ...highlights],
       }
     });
   }
