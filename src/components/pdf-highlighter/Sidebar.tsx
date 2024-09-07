@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import type { IHighlight } from "@argument-studio/react-pdf-highlighter-with-categories";
-import CategoryEditor from "./CategoryEditor";
+// import CategoryEditor from "./CategoryEditor";
 
 interface Props {
   categoryLabels: { label: string; background: string }[];
@@ -118,13 +118,6 @@ export function Sidebar({
           <button onClick={resetHighlights}>Reset highlights</button>
         </div>
       ) : null}
-
-      <CategoryEditor
-        categoryLabels={categoryLabels}
-        setCategoryLabels={setCategoryLabels}
-        show={show}
-        setShow={setShow}
-      />
     </div>
   );
 }
