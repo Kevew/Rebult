@@ -31,12 +31,12 @@ export function Sidebar({
       </div>
 
       {/* sidebar comments */}
-      <ul className="sidebar__highlights">
+      <ul>
         {highlights.map((highlight, index) => (
           <li
             key={index}
             ref={highlightRefs.current[index]}
-            className="sidebar__highlight"
+            className="hover:bg-gray-300 rounded mb-2"
             onClick={() => {
               updateHash(highlight);
             }}
@@ -60,6 +60,7 @@ export function Sidebar({
             <div className="highlight__location">
               Page {highlight.position.pageNumber}
             </div>
+            <hr></hr>
           </li>
         ))}
       </ul>
