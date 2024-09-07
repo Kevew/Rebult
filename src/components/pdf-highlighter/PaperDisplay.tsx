@@ -241,10 +241,23 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
       <Button className="bg-gray-400 text-zinc-700 hover:bg-gray-300" onClick={() => setState(prev => ({ ...prev, flag: !prev.flag }))} style={{alignSelf:"flex-end"}}>toggle mode {state.flag ? "view only" : "suggest only"}</Button>
       <div
         style={{
+          display: "flex",
+        }}
+      >
+        <Sidebar
+          highlightRefs={commentRefs}
+          highlights={highlights as IHighlight[]}
+        />
+        <div style={{
+          width:"100%",
+          position: "relative",
+        }}>
+          <div
+        style={{
           left: "10px",
           display: "flex",
           gap: "10px",
-          zIndex: 100,
+          marginBottom: "0.5rem"
         }}
       >
         <Button
@@ -291,20 +304,6 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
           Back to Page 1
         </Button>
       </div>
-      
-      <div
-        style={{
-          display: "flex",
-        }}
-      >
-        <Sidebar
-          highlightRefs={commentRefs}
-          highlights={highlights as IHighlight[]}
-        />
-        <div style={{
-          width:"100%",
-          position: "relative",
-        }}>
         <PdfLoader url={pdf} beforeLoad={<></>/*<Spinner />*/} data={data}>
           {(pdfDocument) => (
             <PdfHighlighter
