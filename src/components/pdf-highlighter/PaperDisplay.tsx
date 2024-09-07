@@ -46,7 +46,7 @@ const getCategoryLabels : (x : Map<string, string>) => {label : string, backgrou
 
 const getRandomColor : () => string = () => "#" + Math.floor(Math.random()*16777215).toString(16);
 
-interface IHighlight {
+export interface IHighlight {
   position: ScaledPosition,
   content: Content,
   comment: Comment
