@@ -1,15 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import type { IHighlight } from "@argument-studio/react-pdf-highlighter-with-categories";
 // import CategoryEditor from "./CategoryEditor";
 
 interface Props {
-  categoryLabels: { label: string; background: string }[];
-  setCategoryLabels: (update: { label: string; background: string }[]) => void;
   highlights: Array<IHighlight>;
-  resetHighlights: () => void;
-  toggleDocument: () => void;
-  setPdfUrl: (update: string) => void;
-  setPdfData: (update: Uint8Array) => void;
   highlightRefs: React.MutableRefObject<React.RefObject<HTMLLIElement>[]>;
 }
 
@@ -18,50 +12,9 @@ const updateHash = (highlight: IHighlight) => {
 };
 
 export function Sidebar({
-  categoryLabels,
-  setCategoryLabels,
   highlights,
-  toggleDocument,
-  resetHighlights,
-  setPdfUrl,
-  setPdfData,
   highlightRefs
 }: Props) {
-  const [show, setShow] = useState(false);
-  const [urlInput, setUrlInput] = useState("");
-
-  const handleSetUrl = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setPdfUrl(urlInput);
-    setUrlInput("");
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-
-    if (!file) {
-      console.warn("No file chosen");
-      return;
-    }
-
-    //Step 2: Read the file using file reader
-    let fileReader = new FileReader();
-    fileReader.onerror = () => {
-      alert(`Error occurred while reading ${file?.name}`);
-    };
-    fileReader.onabort = () => {
-      console.log(`Reading ${file?.name} was aborted.`);
-    };
-    fileReader.onload = function () {
-      //Step 3:turn array buffer into typed array
-      if (this.result instanceof ArrayBuffer) {
-        setPdfData(new Uint8Array(this.result));
-      }
-    };
-    //Step 4:Read the file as ArrayBuffer
-    fileReader.readAsArrayBuffer(file);
-  };
-
   return (
     <div className="sidebar" style={{ width: "25vw" }}>
       <div style={{ padding: "1rem" }}>
@@ -110,14 +63,6 @@ export function Sidebar({
           </li>
         ))}
       </ul>
-      <div style={{ padding: "1rem" }}>
-        <button onClick={toggleDocument}>Toggle PDF document</button>
-      </div>
-      {highlights.length > 0 ? (
-        <div style={{ padding: "1rem" }}>
-          <button onClick={resetHighlights}>Reset highlights</button>
-        </div>
-      ) : null}
     </div>
   );
 }

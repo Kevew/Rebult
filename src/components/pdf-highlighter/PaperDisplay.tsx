@@ -319,16 +319,6 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
       <Sidebar
         highlightRefs={commentRefs}
         highlights={highlights as IHighlight[]}
-        resetHighlights={resetHighlights}
-        toggleDocument={() => {}}
-        categoryLabels={getCategoryLabels(state.labelMap)}
-        setCategoryLabels={setCategoryLabels}
-        setPdfUrl={(url) => {
-          setState((prev) => ({ ...prev, url, data: null, highlights: [] }));
-        }}
-        setPdfData={(data) => {
-          setState((prev) => ({ ...prev, data, url: "", highlights: [] }));
-        }}
       />
       <div
         style={{
