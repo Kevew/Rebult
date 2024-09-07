@@ -16,3 +16,17 @@ To configure the database
 `npx prisma db push`
 
 
+# .env template
+```
+DATABASE_URL=
+NEXTAUTH_SECRET=
+
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+
+UPLOADTHING_SECRET=
+UPLOADTHING_APP_ID=
+
+REDIS_URL=
+REDIS_SECRET=
+```
