@@ -27,6 +27,7 @@ import { FC } from "react"
 import * as React from "react"
 import axios from "axios";
 import { toast } from "@/hooks/use-toast";
+import { Button } from "../ui/Button";
 
 const getNextId = () => String(Math.random()).slice(2);
 const parseIdFromHash = () =>
@@ -237,7 +238,7 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
 
   return (
     <div className="App" style={{overflow:"hidden", display:"flex", flexDirection:"column"}}>
-      <button onClick={() => setState(prev => ({ ...prev, flag: !prev.flag }))} style={{alignSelf:"flex-end"}}>toggle mode {state.flag ? "view only" : "suggest only"}</button>
+      <Button className="bg-gray-400 text-zinc-700 hover:bg-gray-300" onClick={() => setState(prev => ({ ...prev, flag: !prev.flag }))} style={{alignSelf:"flex-end"}}>toggle mode {state.flag ? "view only" : "suggest only"}</Button>
       <div
         style={{
           left: "10px",
@@ -246,13 +247,8 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
           zIndex: 100,
         }}
       >
-        <button
-          style={{
-            width: "70px",
-            height: "20px",
-            backgroundColor: "grey",
-            borderRadius: "5px",
-          }}
+        <Button
+          className="bg-gray-400 text-zinc-700 h-0.5 hover:bg-gray-300"
           onClick={() =>
             setState((prev) => ({
               ...prev,
@@ -261,25 +257,14 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
           }
         >
           Decrease
-        </button>
-        <div
-          style={{
-            height: "20px",
-            backgroundColor: "grey",
-            borderRadius: "5px",
-            textAlign: "center",
-            padding: "0 5px",
-          }}
+        </Button>
+        <Button
+          className="bg-gray-400 text-zinc-700 h-0.5 hover:bg-gray-300"
         >
           {"Current page: " + state.currentPage}
-        </div>
-        <button
-          style={{
-            width: "70px",
-            height: "20px",
-            backgroundColor: "grey",
-            borderRadius: "5px",
-          }}
+        </Button>
+        <Button
+          className="bg-gray-400 text-zinc-700 h-0.5 hover:bg-gray-300"
           onClick={() =>
             setState((prev) => ({
               ...prev,
@@ -291,29 +276,18 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
           }
         >
           Increase
-        </button>
-        <div
-          style={{
-            height: "20px",
-            backgroundColor: "grey",
-            borderRadius: "5px",
-            textAlign: "center",
-            padding: "0 5px",
-          }}
+        </Button>
+        <Button
+          className="bg-gray-400 text-zinc-700 h-0.5 hover:bg-gray-300"
         >
           {"Pages: " + state.pageCount}
-        </div>
-        <button
-          style={{
-            width: "auto",
-            height: "20px",
-            backgroundColor: "grey",
-            borderRadius: "5px",
-          }}
+        </Button>
+        <Button
+          className="bg-gray-400 text-zinc-700 h-0.5 hover:bg-gray-300"
           onClick={() => setState((prev) => ({ ...prev, destinationPage: 1 }))}
         >
           Back to Page 1
-        </button>
+        </Button>
       </div>
       
       <div
