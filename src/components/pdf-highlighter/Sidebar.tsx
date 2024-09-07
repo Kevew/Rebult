@@ -1,6 +1,6 @@
 import React from "react";
-import type { IHighlight } from "@argument-studio/react-pdf-highlighter-with-categories";
-// import CategoryEditor from "./CategoryEditor";
+import type { ExtendedHighlight } from "@/types/db";
+import { IHighlight } from "./PaperDisplay";
 
 interface Props {
   highlights: Array<IHighlight>;
@@ -42,7 +42,7 @@ export function Sidebar({
             }}
           >
             <div>
-              <strong>{highlight.comment.text}</strong>
+              <strong>{highlight.comment.text} - {highlight.author.name}</strong>
               {highlight.content.text ? (
                 <blockquote style={{ marginTop: "0.5rem" }}>
                   {`${highlight.content.text.slice(0, 90).trim()}…`}
