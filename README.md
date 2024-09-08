@@ -1,3 +1,20 @@
+# setup
+```
+git clone https://github.com/FrederickPu/react-pdf-highlighter-with-categories
+yarn
+cd react-pdf-highlighter-with-categories
+npm install
+npm run build
+```
+
+# react-pdf-highlighter-with-categories
+if you make any changes to the local `react-pdf-highlighter-with-categories` package, you will need to rebuild it in order for those changes to reflect on rebutl.
+To do this:
+```
+cd react-pdf-highlighter-with-categories
+npm run build
+```
+
 # schema.prisma
 After changing `schema.prism` you will need to do the following in order for indexing to work again for PrismaClient.ts:
 - run `yarn` to clear prisma cache
