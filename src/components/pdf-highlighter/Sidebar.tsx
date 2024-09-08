@@ -5,6 +5,7 @@ import { IHighlight } from "./PaperDisplay";
 interface Props {
   highlights: Array<IHighlight>;
   highlightRefs: React.MutableRefObject<React.RefObject<HTMLLIElement>[]>;
+  selectedId?: string
 }
 
 const updateHash = (highlight: IHighlight) => {
@@ -13,10 +14,11 @@ const updateHash = (highlight: IHighlight) => {
 
 export function Sidebar({
   highlights,
-  highlightRefs
+  highlightRefs,
+  selectedId
 }: Props) {
   return (
-    <div className="sidebar" style={{width:"20vw", marginRight:"1rem", overflow:"auto"}}>
+    <div className="sidebar" style={{width:"20vw", marginRight:"1rem", overflowY:"scroll"}}>
       <div style={{ padding: "1rem" }}>
         <div className="description">
           <h2 style={{ marginBottom: "1rem" }}>react-pdf-highlighter</h2>
@@ -36,7 +38,7 @@ export function Sidebar({
           <li
             key={index}
             ref={highlightRefs.current[index]}
-            className="hover:bg-gray-300 rounded mb-2"
+            className={`hover:bg-gray-300 rounded mb-2 ${highlight.id === selectedId ? "bg-green-100" : ""}`}
             onClick={() => {
               updateHash(highlight);
             }}
