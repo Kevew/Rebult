@@ -74,7 +74,7 @@ const TopPapers = ({profile}: TopPapersProps) => {
     }, [mode]);
 
     return (
-        <div className="absolute top-0 w-full h-full flex flex-col">
+        <div className="absolute top-0 w-full h-full flex flex-col overflow-scroll overflow-x-hidden">
             <div className="relative flex inline-block align-middle flex-row bg-white border-b-2 border-gray-200 space-x-4 h-1/8 py-2 m-1">
                 <p className="align-middle font-bold">Top Papers Sort By: </p>
                 <Button
