@@ -5,6 +5,7 @@ import { FC, useEffect, useState } from 'react';
 import UserAvatar from '../UserAvatar';
 import AboutMe from './AboutMe';
 import EditAboutMe from './EditAboutMe';
+import TopPapers from './TopPapers';
 
 interface UserProfileViewProps {
     profile: User
@@ -56,8 +57,8 @@ const UserProfileView: FC<UserProfileViewProps> = ({profile}: UserProfileViewPro
                         />
                     </div>
                 </div>
-                <div className='relative bg-red-500 border border-gray-200 py-40 w-1/2 m-1'>
-                    Top Papers
+                <div className='relative flex border-2 border-gray-200 bg-white py-40 w-1/2 m-1 flex flex-col h-full'>
+                    <TopPapers profile={profile}/>
                 </div>
             </div>
             <div className='relative bg-red-700 border border-gray-200 w-full py-3 items-center'>

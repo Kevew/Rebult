@@ -11,7 +11,6 @@ interface AboutMeProps {
 
 const AboutMe: FC<AboutMeProps> = ({profile, editable, callParent}: AboutMeProps) => {
 
-
     const aboutMeRef = useRef<HTMLParagraphElement>(null);
 
     const description = profile.aboutMeDescription!;
@@ -65,6 +64,7 @@ const AboutMe: FC<AboutMeProps> = ({profile, editable, callParent}: AboutMeProps
                 {clientHeight >= 128 ? (
                     // blur bottom if content is too long
                     <div className='absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white to-transparent'></div>
+
                 ) : null}
             </p>
         </div>
