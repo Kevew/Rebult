@@ -73,7 +73,7 @@ const HighlightPopup = ({
     initialHighlights: ExtendedHighlight[],
     subreddit : Subreddit,
     createHighlight: (highlight : Highlight) => string, // creates a higlight and returns the highlight id
-    user: User
+    user?: User
   }
 
   interface State {
@@ -97,8 +97,8 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
         if (!lol.has(x))
           lol.set(x.author.id, getRandomColor())
       })
-      if (!lol.has(user.id))
-        lol.set(user.id, getRandomColor())
+      if (!lol.has(user?.id))
+        lol.set(user?.id, getRandomColor())
       return lol
     })(),
     destinationPage: 1,
@@ -181,7 +181,7 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
       console.log(user)
       return {
         ...prev,
-        highlights: [{ ...highlight, id, author: user, subreddit: subreddit }, ...highlights],
+        highlights: [{ ...highlight, id, author: user!, subreddit: subreddit }, ...highlights],
       }
     });
   }
@@ -221,7 +221,7 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
 
   return (
     <div className="App" style={{overflow:"hidden", display:"flex", flexDirection:"column", height:"100%"}}>
-      <Button className="bg-gray-400 text-zinc-700 hover:bg-gray-300 self-end" onClick={() => setState(prev => ({ ...prev, flag: !prev.flag }))}>toggle mode {state.flag ? "view only" : "suggest only"}</Button>
+      <Button className="bg-gray-400 text-zinc-700 hover:bg-gray-300 self-end" onClick={() => setState(prev => ({ ...prev, flag: !prev.flag }))} disabled={user === undefined}>toggle mode {state.flag || user === undefined ? "view only" : "suggest only"}</Button>
       <Button className="bg-gray-400 text-zinc-700 hover:bg-gray-300 self-end mt-1" onClick={() => setState(prev => ({ ...prev, selectedId:undefined }))} disabled={state.selectedId?.mode !== "click"}>Clear selected comment</Button>
       <div
         style={{
@@ -349,7 +349,7 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
                     comment={highlight.comment}
                     categoryLabels={getCategoryLabels(state.labelMap)}
                     pointerEvents={state.flag}
-                    authorId={highlight.author ? highlight.author.id : user.id}
+                    authorId={highlight.author ? highlight.author.id : user!.id}
                     onClick={() => { 
                       commentRefs.current[getHighlightIndex(highlight.id)].current?.scrollIntoView({
                         behavior: 'smooth',
@@ -402,7 +402,7 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
                 );
               }}
               highlights={highlights}
-              selectionMode={!state.flag}
+              selectionMode={!state.flag && user !== undefined}
             />
           )}
         </PdfLoader>
