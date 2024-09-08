@@ -36,10 +36,26 @@ export const authOptions: NextAuthOptions = {
                     email: token.email,
                 },
             })
+
+            if (dbUser){
+                if(token.email === null){
+                    return;
+                }
+                await db.user.update({
+                    where: {
+                        email: token.email,
+                    },
+                    data: {
+                        aboutMeDescription: "Hello, feel free to change me to whatever you want!",
+                        privateAccount: false,
+                        emailVerified: false,
+                    }
+                })
+            }
             
             if (!dbUser){
-                token.id = user!.id
-                return token
+                token.id = user!.id;
+                return token;
             }
 
             if (!dbUser.username){

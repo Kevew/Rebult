@@ -47,7 +47,7 @@ model User {
   id                String         @id @default(cuid())
   name              String?
   email             String?        @unique
-  emailVerified     DateTime?
+  emailVerified     Boolean?
   createdSubreddits Subreddit[]    @relation("CreatedBy")
   createdPapers     Paper[]        @relation("CreatedBy")
   subscriptions     Subscription[]
