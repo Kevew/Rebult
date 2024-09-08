@@ -25,7 +25,7 @@ const EditAboutMe = ({description, closeWindow}: EditAboutMeProps) => {
                 description: textInput
             }
 
-            const { data } = await axios.post('/api/profile', payload)
+            const { data } = await axios.post('/api/profile/aboutme', payload)
             return data as string;
         },
         onError: (err) => {

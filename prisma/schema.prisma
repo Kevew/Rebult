@@ -152,6 +152,8 @@ model Paper {
 
   creator User @relation("CreatedBy", fields:[creatorId], references: [id])
   creatorId String
+  createdAt DateTime? @default(now())
+
 
   name String @unique
   pdf String
