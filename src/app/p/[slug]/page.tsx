@@ -38,7 +38,7 @@ const page = async ({params}: pageProps) => {
     if(!paper) return notFound()
 
     return(
-        <>
+        <div style={{height:"100%", overflow:"hidden"}}>
             <h1 className='font-bold text-3xl md:text-4xl h-14'>
                 p/{paper.name}
             </h1>
@@ -50,7 +50,7 @@ const page = async ({params}: pageProps) => {
                 r/{paper.subreddit.name}
             </a>
             <PaperDisplay name={paper.name} pdf={paper.pdf} initialHighlights={paper.subreddit.highlights as ExtendedHighlight[]} user={session?.user} subreddit={paper.subreddit}/>
-        </>
+        </div>
     )
 }
 
