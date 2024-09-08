@@ -84,6 +84,7 @@ const HighlightPopup = ({
     pageCount: number;
     currentPage: number;
     flag: boolean;
+    selectedId?: { id: string; mode: "click" | "hover" };
   }
 
 export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlights, subreddit}) => {
@@ -107,24 +108,6 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
   });
 
   const commentRefs = React.useRef(state.highlights.map(() => React.createRef<HTMLLIElement>()))
-
-
-  const resetHighlights = () => {
-    setState((prev) => ({
-      ...prev, highlights: [],
-    }));
-  };
-
-  const setCategoryLabels = (update: { label: string; background: string }[]) => {
-    setState((prev) => {
-      const newMap = new Map(prev.labelMap);
-      if (newMap.has(user.id))
-        newMap.set(user.id, getRandomColor());
-      return { ...prev, labelMap : newMap};
-
-    });
-  };
-
 
   let scrollViewerTo = (highlight: any) => { };
 
@@ -239,6 +222,7 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
   return (
     <div className="App" style={{overflow:"hidden", display:"flex", flexDirection:"column"}}>
       <Button className="bg-gray-400 text-zinc-700 hover:bg-gray-300 self-end" onClick={() => setState(prev => ({ ...prev, flag: !prev.flag }))}>toggle mode {state.flag ? "view only" : "suggest only"}</Button>
+      <Button className="bg-gray-400 text-zinc-700 hover:bg-gray-300 self-end mt-1" onClick={() => setState(prev => ({ ...prev, selectedId:undefined }))} disabled={state.selectedId?.mode !== "click"}>Clear selected comment</Button>
       <div
         style={{
           display: "flex",
@@ -247,6 +231,7 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
         <Sidebar
           highlightRefs={commentRefs}
           highlights={highlights as IHighlight[]}
+          selectedId={state.selectedId?.id}
         />
         <div style={{
           width:"100%",
@@ -363,7 +348,25 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
                     categoryLabels={getCategoryLabels(state.labelMap)}
                     pointerEvents={state.flag}
                     authorId={highlight.author ? highlight.author.id : user.id}
-                    onClick={() => { console.log(getHighlightIndex(highlight.id)); console.log(commentRefs); commentRefs.current[getHighlightIndex(highlight.id)].current?.scrollIntoView() }}
+                    onClick={() => { 
+                      commentRefs.current[getHighlightIndex(highlight.id)].current?.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest',
+                      }) 
+                      setState(prev => ({...prev, selectedId: { id: highlight.id, mode: "click" }}))
+                    }}
+                    onMouseOver={() => { 
+                      if (state.selectedId?.mode == "click")
+                        return
+                      commentRefs.current[getHighlightIndex(highlight.id)].current?.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest',
+                      }) 
+                      setState(prev => ({...prev, selectedId: { id: highlight.id, mode: "hover" }}))
+                    }}
+                    onMouseOut={() => {
+                      setState(prev => (prev.selectedId?.mode == "hover" ? {...prev, selectedId: undefined} : prev))
+                    }}
                   />
                 ) : (
                   <AreaHighlight
