@@ -232,6 +232,7 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
           highlightRefs={commentRefs}
           highlights={highlights as IHighlight[]}
           selectedId={state.selectedId?.id}
+          categoryLabels={state.labelMap}
         />
         <div style={{
           width:"100%",

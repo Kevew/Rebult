@@ -1,11 +1,13 @@
 import React from "react";
 import type { ExtendedHighlight } from "@/types/db";
 import { IHighlight } from "./PaperDisplay";
+import { isUndefined } from "util";
 
 interface Props {
   highlights: Array<IHighlight>;
   highlightRefs: React.MutableRefObject<React.RefObject<HTMLLIElement>[]>;
-  selectedId?: string
+  selectedId?: string,
+  categoryLabels: Map<string, string>
 }
 
 const updateHash = (highlight: IHighlight) => {
@@ -15,10 +17,12 @@ const updateHash = (highlight: IHighlight) => {
 export function Sidebar({
   highlights,
   highlightRefs,
-  selectedId
+  selectedId,
+  categoryLabels
 }: Props) {
   return (
-    <div className="sidebar" style={{width:"20vw", marginRight:"1rem", overflowY:"scroll"}}>
+    // TODO:: fix view height hack so that formatting is resilient to rescaling
+    <div className="sidebar" style={{width:"20vw", maxHeight:"65vh", marginRight:"1rem", overflowY:"scroll"}}>
       <div style={{ padding: "1rem" }}>
         <div className="description">
           <h2 style={{ marginBottom: "1rem" }}>react-pdf-highlighter</h2>
@@ -38,7 +42,8 @@ export function Sidebar({
           <li
             key={index}
             ref={highlightRefs.current[index]}
-            className={`hover:bg-gray-300 rounded mb-2 ${highlight.id === selectedId ? "bg-green-100" : ""}`}
+            className={`hover:bg-gray-300 rounded mb-2`}
+            style={highlight.id == selectedId ? {backgroundColor: categoryLabels.get(highlight.author.id)} : undefined}
             onClick={() => {
               updateHash(highlight);
             }}
