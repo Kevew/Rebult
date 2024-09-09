@@ -22,7 +22,7 @@ export function Sidebar({
 }: Props) {
   return (
     // TODO:: fix view height hack so that formatting is resilient to rescaling
-    <div className="sidebar" style={{width:"20vw", height:"60vh", marginRight:"1rem", overflowY:"scroll", marginBottom:"1rem"}}>
+    <div className="sidebar" style={{width:"20vw", height: "80vh", marginRight:"1rem", overflowY:"scroll"}}>
       <div style={{ padding: "1rem" }}>
         <div className="description">
           <h2 style={{ marginBottom: "1rem" }}>react-pdf-highlighter</h2>
@@ -37,12 +37,12 @@ export function Sidebar({
       </div>
 
       {/* sidebar comments */}
-      <ul>
+      <ul style={{display: "flex", flexDirection: "column",gap:"0.5rem"}}>
         {highlights.map((highlight, index) => (
           <li
             key={index}
             ref={highlightRefs.current[index]}
-            className={`hover:bg-gray-300 rounded mb-2`}
+            className={`hover:bg-gray-300 rounded`}
             style={highlight.id == selectedId ? {backgroundColor: categoryLabels.get(highlight.author.id)} : undefined}
             onClick={() => {
               updateHash(highlight);
