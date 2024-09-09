@@ -38,7 +38,7 @@ const page = async ({params}: pageProps) => {
     if(!paper) return notFound()
 
     return(
-        <div style={{height:"100%", overflow:"hidden"}}>
+        <div className="h-full w-full mt-12 overflow-y-hidden">
             <h1 className='font-bold text-3xl md:text-4xl h-14'>
                 p/{paper.name}
             </h1>

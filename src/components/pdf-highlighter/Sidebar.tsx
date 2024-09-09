@@ -22,7 +22,7 @@ export function Sidebar({
 }: Props) {
   return (
     // TODO:: fix view height hack so that formatting is resilient to rescaling
-    <div className="sidebar" style={{width:"20vw", marginRight:"1rem", overflowY:"scroll", marginBottom:"1rem"}}>
+    <div className="sidebar" style={{width:"20vw", height:"60vh", marginRight:"1rem", overflowY:"scroll", marginBottom:"1rem"}}>
       <div style={{ padding: "1rem" }}>
         <div className="description">
           <h2 style={{ marginBottom: "1rem" }}>react-pdf-highlighter</h2>

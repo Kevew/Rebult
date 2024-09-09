@@ -28,11 +28,11 @@ const page = async ({params}: pageProps) => {
     }
 
     return(
-        <>{viewable ? 
+        <div className="w-full h-full mt-12">{viewable ? 
             <UserProfileView profile={profileInformation}/> : 
             <OutsiderProfileView profile={profileInformation}/>
         }
-        </>
+        </div>
     )
 }
 

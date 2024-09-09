@@ -29,6 +29,8 @@ import axios from "axios";
 import { toast } from "@/hooks/use-toast";
 import { Button } from "../ui/Button";
 
+import { disableScroll } from "@/hooks/disableScroll";
+
 const getNextId = () => String(Math.random()).slice(2);
 const parseIdFromHash = () =>
   document.location.hash.slice("#highlight-".length);
@@ -88,6 +90,7 @@ const HighlightPopup = ({
   }
 
 export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlights, subreddit}) => {
+  disableScroll();
   const [state, setState] = React.useState<State>({
     data: null,
     highlights: initialHighlights as IHighlight[],
@@ -223,22 +226,14 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
     <div className="App" style={{overflow:"hidden", display:"flex", flexDirection:"column", height:"100%"}}>
       <Button className="bg-gray-400 text-zinc-700 hover:bg-gray-300 self-end" onClick={() => setState(prev => ({ ...prev, flag: !prev.flag }))} disabled={user === undefined}>toggle mode {state.flag || user === undefined ? "view only" : "suggest only"}</Button>
       <Button className="bg-gray-400 text-zinc-700 hover:bg-gray-300 self-end mt-1" onClick={() => setState(prev => ({ ...prev, selectedId:undefined }))} disabled={state.selectedId?.mode !== "click"}>Clear selected comment</Button>
-      <div
-        style={{
-          display: "flex",
-          height:"100%"
-        }}
-      >
+      <div className="flex w-full h-full">
         <Sidebar
           highlightRefs={commentRefs}
           highlights={highlights as IHighlight[]}
           selectedId={state.selectedId?.id}
           categoryLabels={state.labelMap}
         />
-        <div style={{
-          width:"100%",
-          position: "relative",
-        }}>
+        <div className="relative w-full">
           <div
         style={{
           left: "10px",
