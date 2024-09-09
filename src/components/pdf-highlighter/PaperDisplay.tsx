@@ -364,7 +364,7 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
                     <AreaHighlight
                       isScrolledTo={isScrolledTo}
                       highlight={highlight}
-                      authorId={highlight.author.id}
+                      authorId={highlight.author ? highlight.author.id : user!.id}
                       onChange={(boundingRect) => {
                         updateHighlight(
                           highlight.id,
@@ -374,6 +374,13 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
                       }}
                       comment={highlight.comment}
                       categoryLabels={getCategoryLabels(state.labelMap)}
+                      onClick={() => {
+                        commentRefs.current[getHighlightIndex(highlight.id)].current?.scrollIntoView({
+                          behavior: 'smooth',
+                          block: 'nearest',
+                        }) 
+                        setState(prev => ({...prev, selectedId: { id: highlight.id, mode: "click" }}))
+                      }}
                     />
                   );
 

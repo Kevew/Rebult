@@ -16,6 +16,7 @@ interface Props {
   };
   authorId: string;
   isScrolledTo: boolean;
+  onClick: () => void;
 }
 
 export class AreaHighlight extends Component<Props> {
@@ -27,6 +28,7 @@ export class AreaHighlight extends Component<Props> {
       authorId,
       isScrolledTo,
       categoryLabels,
+      onClick,
       ...otherProps
     } = this.props;
 
@@ -73,17 +75,6 @@ export class AreaHighlight extends Component<Props> {
 
             onChange(boundingRect);
           }}
-          onResizeStop={(_mouseEvent, _direction, ref, _delta, position) => {
-            const boundingRect: LTWHP = {
-              top: position.y,
-              left: position.x,
-              width: ref.offsetWidth,
-              height: ref.offsetHeight,
-              pageNumber: getPageFromElement(ref)?.number || -1,
-            };
-
-            onChange(boundingRect);
-          }}
           position={{
             x: highlight.position.boundingRect.left,
             y: highlight.position.boundingRect.top,
@@ -95,9 +86,11 @@ export class AreaHighlight extends Component<Props> {
           onClick={(event: Event) => {
             event.stopPropagation();
             event.preventDefault();
+            onClick()
           }}
           {...otherProps}
           style={handleStyle(categoryLabels)}
+          disableDragging
         />
       </div>
     );
