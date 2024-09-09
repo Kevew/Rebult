@@ -4,7 +4,6 @@ import {
     PdfLoader,
     PdfHighlighter,
     Popup,
-    AreaHighlight,
    NewHighlight,
    ScaledPosition,
    Content,
@@ -18,6 +17,7 @@ import { useMutation } from '@tanstack/react-query';
 
 
 import { Highlight } from "./Highlight";
+import { AreaHighlight } from "./AreaHighlight"
 
 import { Sidebar } from "./Sidebar";
 
@@ -370,6 +370,7 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
                   <AreaHighlight
                     isScrolledTo={isScrolledTo}
                     highlight={highlight}
+                    authorId={highlight.author.id}
                     onChange={(boundingRect) => {
                       updateHighlight(
                         highlight.id,

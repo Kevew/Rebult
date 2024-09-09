@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 
 import { Rnd } from "react-rnd";
-import { getPageFromElement } from "../lib/pdfjs-dom";
+import { getPageFromElement } from "../../../react-pdf-highlighter-with-categories/src/lib/pdfjs-dom";
 
-import "../style/AreaHighlight.css";
+// import "../../../react-pdf-highlighter-with-categories/style/AreaHighlight.css"
 
-import type { LTWHP, ViewportHighlight } from "../types.js";
+import type { LTWHP, ViewportHighlight } from "@argument-studio/react-pdf-highlighter-with-categories/dist/esm/types";
 
 interface Props {
   categoryLabels: Array<{ label: string; background: string }>;
@@ -31,20 +31,25 @@ export class AreaHighlight extends Component<Props> {
     } = this.props;
 
     const handleStyle = (labels: { label: string; background: string }[]) => {
+      console.log
       let color = "#ddcc77";
 
       if (isScrolledTo) {
         return { background: "" };
       }
 
+      console.log(labels)
       if (comment) {
         for (let item of labels) {
+          console.log("item", item)
           if (authorId === item.label) {
+            console.log(item.label)
             color = item.background;
           }
         }
       }
 
+      console.log("color", color)
       return { background: color };
     };
 
