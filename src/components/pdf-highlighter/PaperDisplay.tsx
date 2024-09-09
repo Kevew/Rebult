@@ -236,173 +236,167 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
           categoryLabels={state.labelMap}
         />
         <div className="relative w-full">
-          <div
-        style={{
-          left: "10px",
-          display: "flex",
-          gap: "10px",
-        }}
-      >
-        <Button
-          className="bg-gray-400 text-zinc-700 h-0.5 hover:bg-gray-300"
-          onClick={() =>
-            setState((prev) => ({
-              ...prev,
-              destinationPage: prev.currentPage > 1 ? prev.currentPage - 1 : 1,
-            }))
-          }
-        >
-          Decrease
-        </Button>
-        <Button
-          className="bg-gray-400 text-zinc-700 h-0.5 hover:bg-gray-300"
-          disabled
-        >
-          {"Current page: " + state.currentPage}
-        </Button>
-        <Button
-          className="bg-gray-400 text-zinc-700 h-0.5 hover:bg-gray-300"
-          onClick={() =>
-            setState((prev) => ({
-              ...prev,
-              destinationPage:
-                prev.currentPage < prev.pageCount
-                  ? prev.currentPage + 1
-                  : prev.currentPage,
-            }))
-          }
-        >
-          Increase
-        </Button>
-        <Button
-          className="bg-gray-400 text-zinc-700 h-0.5 hover:bg-gray-300"
-          disabled
-        >
-          {"Pages: " + state.pageCount}
-        </Button>
-        <Button
-          className="bg-gray-400 text-zinc-700 h-0.5 hover:bg-gray-300"
-          onClick={() => setState((prev) => ({ ...prev, destinationPage: 1 }))}
-        >
-          Back to Page 1
-        </Button>
-      </div>
-        <PdfLoader url={pdf} beforeLoad={<></>/*<Spinner />*/} data={data}>
-          {(pdfDocument) => (
-            <PdfHighlighter
-              categoryLabels={getCategoryLabels(state.labelMap)}
-              pdfDocument={pdfDocument}
-              enableAreaSelection={(event) => event.altKey}
-              onScrollChange={resetHash}
-              // pdfScaleValue="page-width"
-              scrollRef={(scrollTo) => {
-                scrollViewerTo = scrollTo;
+          <div className="left-2 flex gap-2" >
+            <Button
+              className="bg-gray-400 text-zinc-700 h-0.5 hover:bg-gray-300"
+              onClick={() =>
+                setState((prev) => ({
+                  ...prev,
+                  destinationPage: prev.currentPage > 1 ? prev.currentPage - 1 : 1,
+                }))
+              }
+            >
+              Decrease
+            </Button>
+            <Button
+              className="bg-gray-400 text-zinc-700 h-0.5 hover:bg-gray-300"
+              disabled
+            >
+              {"Current page: " + state.currentPage}
+            </Button>
+            <Button
+              className="bg-gray-400 text-zinc-700 h-0.5 hover:bg-gray-300"
+              onClick={() =>
+                setState((prev) => ({
+                  ...prev,
+                  destinationPage:
+                    prev.currentPage < prev.pageCount
+                      ? prev.currentPage + 1
+                      : prev.currentPage,
+                }))
+              }
+            >
+              Increase
+            </Button>
+            <Button
+              className="bg-gray-400 text-zinc-700 h-0.5 hover:bg-gray-300"
+              disabled
+            >
+              {"Pages: " + state.pageCount}
+            </Button>
+            <Button
+              className="bg-gray-400 text-zinc-700 h-0.5 hover:bg-gray-300"
+              onClick={() => setState((prev) => ({ ...prev, destinationPage: 1 }))}
+            >
+              Back to Page 1
+            </Button>
+          </div>
+          <PdfLoader url={pdf} beforeLoad={<></>/*<Spinner />*/} data={data}>
+            {(pdfDocument) => (
+              <PdfHighlighter
+                categoryLabels={getCategoryLabels(state.labelMap)}
+                pdfDocument={pdfDocument}
+                enableAreaSelection={(event) => event.altKey}
+                onScrollChange={resetHash}
+                // pdfScaleValue="page-width"
+                scrollRef={(scrollTo) => {
+                  scrollViewerTo = scrollTo;
 
-                scrollToHighlightFromHash();
-              }}
-              destinationPage={state.destinationPage}
-              getPageCount={(pageCount) => {
-                setState((prev) => ({ ...prev, pageCount }));
-              }}
-              getCurrentPage={(currentPage) => {
-                setState((prev) => ({ ...prev, currentPage }));
-              }}
-              onSelectionFinished={(
-                position,
-                content,
-                hideTipAndSelection,
-                transformSelection,
-                categoryLabels
-              ) => (
-                <Tip
-                  onOpen={transformSelection}
-                  onConfirm={(comment) => {
-                    addHighlight({ content, position, comment });
+                  scrollToHighlightFromHash();
+                }}
+                destinationPage={state.destinationPage}
+                getPageCount={(pageCount) => {
+                  setState((prev) => ({ ...prev, pageCount }));
+                }}
+                getCurrentPage={(currentPage) => {
+                  setState((prev) => ({ ...prev, currentPage }));
+                }}
+                onSelectionFinished={(
+                  position,
+                  content,
+                  hideTipAndSelection,
+                  transformSelection,
+                  categoryLabels
+                ) => (
+                  <Tip
+                    onOpen={transformSelection}
+                    onConfirm={(comment) => {
+                      addHighlight({ content, position, comment });
 
-                    hideTipAndSelection();
-                  }}
-                  categoryLabels={categoryLabels}
-                />
-              )}
-              highlightTransform={(
-                highlight,
-                index,
-                setTip,
-                hideTip,
-                viewportToScaled,
-                screenshot,
-                isScrolledTo
-              ) => {
-                console.log(state.highlights)
-                const isTextHighlight = !Boolean(
-                  highlight.content && highlight.content.image
-                );
-
-                const component = isTextHighlight ? (
-                  <Highlight
-                    isScrolledTo={isScrolledTo}
-                    position={highlight.position}
-                    comment={highlight.comment}
-                    categoryLabels={getCategoryLabels(state.labelMap)}
-                    pointerEvents={state.flag}
-                    authorId={highlight.author ? highlight.author.id : user!.id}
-                    onClick={() => { 
-                      commentRefs.current[getHighlightIndex(highlight.id)].current?.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'nearest',
-                      }) 
-                      setState(prev => ({...prev, selectedId: { id: highlight.id, mode: "click" }}))
+                      hideTipAndSelection();
                     }}
-                    onMouseOver={() => { 
-                      if (state.selectedId?.mode == "click")
-                        return
-                      commentRefs.current[getHighlightIndex(highlight.id)].current?.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'nearest',
-                      }) 
-                      setState(prev => ({...prev, selectedId: { id: highlight.id, mode: "hover" }}))
-                    }}
-                    onMouseOut={() => {
-                      setState(prev => (prev.selectedId?.mode == "hover" ? {...prev, selectedId: undefined} : prev))
-                    }}
+                    categoryLabels={categoryLabels}
                   />
-                ) : (
-                  <AreaHighlight
-                    isScrolledTo={isScrolledTo}
-                    highlight={highlight}
-                    authorId={highlight.author.id}
-                    onChange={(boundingRect) => {
-                      updateHighlight(
-                        highlight.id,
-                        { boundingRect: viewportToScaled(boundingRect) },
-                        { image: screenshot(boundingRect) }
-                      );
-                    }}
-                    comment={highlight.comment}
-                    categoryLabels={getCategoryLabels(state.labelMap)}
-                  />
-                );
+                )}
+                highlightTransform={(
+                  highlight,
+                  index,
+                  setTip,
+                  hideTip,
+                  viewportToScaled,
+                  screenshot,
+                  isScrolledTo
+                ) => {
+                  console.log(state.highlights)
+                  const isTextHighlight = !Boolean(
+                    highlight.content && highlight.content.image
+                  );
 
-                return (
-                  // the actual popup portion doesnt work (only component shows rn)
-                  // this is because `pointer-events:none` in highlight.tsx
-                  // TODO :: fix this
-                  <Popup
-                    popupContent={<HighlightPopup {...highlight} />}
-                    onMouseOver={(popupContent) =>
-                      setTip(highlight, (highlight) => popupContent)
-                    }
-                    onMouseOut={hideTip}
-                    key={index}
-                    children={component}
-                  />
-                );
-              }}
-              highlights={highlights}
-              selectionMode={!state.flag && user !== undefined}
-            />
-          )}
-        </PdfLoader>
+                  const component = isTextHighlight ? (
+                    <Highlight
+                      isScrolledTo={isScrolledTo}
+                      position={highlight.position}
+                      comment={highlight.comment}
+                      categoryLabels={getCategoryLabels(state.labelMap)}
+                      pointerEvents={state.flag}
+                      authorId={highlight.author ? highlight.author.id : user!.id}
+                      onClick={() => { 
+                        commentRefs.current[getHighlightIndex(highlight.id)].current?.scrollIntoView({
+                          behavior: 'smooth',
+                          block: 'nearest',
+                        }) 
+                        setState(prev => ({...prev, selectedId: { id: highlight.id, mode: "click" }}))
+                      }}
+                      onMouseOver={() => { 
+                        if (state.selectedId?.mode == "click")
+                          return
+                        commentRefs.current[getHighlightIndex(highlight.id)].current?.scrollIntoView({
+                          behavior: 'smooth',
+                          block: 'nearest',
+                        }) 
+                        setState(prev => ({...prev, selectedId: { id: highlight.id, mode: "hover" }}))
+                      }}
+                      onMouseOut={() => {
+                        setState(prev => (prev.selectedId?.mode == "hover" ? {...prev, selectedId: undefined} : prev))
+                      }}
+                    />
+                  ) : (
+                    <AreaHighlight
+                      isScrolledTo={isScrolledTo}
+                      highlight={highlight}
+                      authorId={highlight.author.id}
+                      onChange={(boundingRect) => {
+                        updateHighlight(
+                          highlight.id,
+                          { boundingRect: viewportToScaled(boundingRect) },
+                          { image: screenshot(boundingRect) }
+                        );
+                      }}
+                      comment={highlight.comment}
+                      categoryLabels={getCategoryLabels(state.labelMap)}
+                    />
+                  );
+
+                  return (
+                    // the actual popup portion doesnt work (only component shows rn)
+                    // this is because `pointer-events:none` in highlight.tsx
+                    // TODO :: fix this
+                    <Popup
+                      popupContent={<HighlightPopup {...highlight} />}
+                      onMouseOver={(popupContent) =>
+                        setTip(highlight, (highlight) => popupContent)
+                      }
+                      onMouseOut={hideTip}
+                      key={index}
+                      children={component}
+                    />
+                  );
+                }}
+                highlights={highlights}
+                selectionMode={!state.flag && user !== undefined}
+              />
+            )}
+          </PdfLoader>
         </div>
       </div>
     </div>
