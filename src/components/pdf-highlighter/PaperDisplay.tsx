@@ -238,8 +238,7 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
         style={{
           left: "10px",
           display: "flex",
-          gap: "10px",
-          marginBottom: "0.5rem",
+          gap: "10px"
         }}
       >
         <Button
@@ -403,7 +402,7 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
         </PdfLoader>
         </div>
       </div>
-    </div>
+          </div>
   );  
 }
 
