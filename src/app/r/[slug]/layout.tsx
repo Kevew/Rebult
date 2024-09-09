@@ -23,6 +23,7 @@ const Layout = async ({children, params: { slug }}
                     votes: true,
                 },
             },
+            paper: true
         },
     });
 
@@ -66,41 +67,54 @@ const Layout = async ({children, params: { slug }}
                         <p className='font-semibold py-3'>About r/{subreddit.name}</p>
                     </div>
                     <dl className='divide-y divide-gray-100 px-6 py-4 text-sm leading-6 bg-white'>
-                    <div className='flex justify-between gap-x-4 py-3'>
-                        <dt className='text-gray-500'>Created</dt>
-                        <dd className='text-gray-700'>
-                        <time dateTime={subreddit.createdAt.toDateString()}>
-                            {format(subreddit.createdAt, 'MMMM d, yyyy')}
-                        </time>
-                        </dd>
-                    </div>
-                    <div className='flex justify-between gap-x-4 py-3'>
-                        <dt className='text-gray-500'>Members</dt>
-                        <dd className='flex items-start gap-x-2'>
-                        <div className='text-gray-900'>{memberCount}</div>
-                        </dd>
-                    </div>
-                    {subreddit.creatorId === session?.user?.id ? (
                         <div className='flex justify-between gap-x-4 py-3'>
-                        <dt className='text-gray-500'>You created this community</dt>
+                            <dt className='text-gray-500'>Created</dt>
+                            <dd className='text-gray-700'>
+                            <time dateTime={subreddit.createdAt.toDateString()}>
+                                {format(subreddit.createdAt, 'MMMM d, yyyy')}
+                            </time>
+                            </dd>
                         </div>
-                    ) : null}
+                        <div className='flex justify-between gap-x-4 py-3'>
+                            <dt className='text-gray-500'>Members</dt>
+                            <dd className='flex items-start gap-x-2'>
+                            <div className='text-gray-900'>{memberCount}</div>
+                            </dd>
+                        </div>
+                        <div className='flex justify-between gap-x-4 py-3'>
+                            <dt className='text-gray-500'>Paper: </dt>
+                            <dd className='flex items-start gap-x-2'>
+                            <div className='text-gray-900'>
+                                <a href={'/p/' + subreddit.paper?.name}>
+                                    {/*   @ts-expect-error   */}
+                                    {subreddit.paper?.name.length >= 15? 
+                                    subreddit.paper?.name.substring(0, 15) + "..." : 
+                                    subreddit.paper?.name}
+                                </a>
+                            </div>
+                            </dd>
+                        </div>
+                        {subreddit.creatorId === session?.user?.id ? (
+                            <div className='flex justify-between gap-x-4 py-3'>
+                            <dt className='text-gray-500'>You created this community</dt>
+                            </div>
+                        ) : null}
 
-                    {subreddit.creatorId !== session?.user?.id ? (
-                        <SubscribeLeaveToggle
-                        isSubscribed={isSubscribed}
-                        subredditId={subreddit.id}
-                        subredditName={subreddit.name}
-                        />
-                    ) : null}
-                    <Link
-                        className={buttonVariants({
-                        variant: 'outline',
-                        className: 'w-full mb-6',
-                        })}
-                        href={`r/${slug}/submit`}>
-                        Create Post
-                    </Link>
+                        {subreddit.creatorId !== session?.user?.id ? (
+                            <SubscribeLeaveToggle
+                            isSubscribed={isSubscribed}
+                            subredditId={subreddit.id}
+                            subredditName={subreddit.name}
+                            />
+                        ) : null}
+                        <Link
+                            className={buttonVariants({
+                            variant: 'outline',
+                            className: 'w-full mb-6',
+                            })}
+                            href={`r/${slug}/submit`}>
+                            Create Post
+                        </Link>
                     </dl>
                     </div>
                 </div>

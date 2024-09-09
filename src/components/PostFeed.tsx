@@ -8,11 +8,13 @@ import { INFINITE_SCROLLING_PAGINATION_RESULTS } from '@/config';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import PostElement from './PostElement';
+import { Paper } from '@prisma/client';
 
 interface PostFeedProps {
     initialPosts: ExtendedPost[],
     // Could be home page
-    subredditName?: string
+    subredditName?: string,
+    paper: Paper | null
 };
 
 const PostFeed: FC<PostFeedProps> = ({initialPosts, subredditName}) => {

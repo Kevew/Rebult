@@ -44,17 +44,13 @@ const page = async ({params}: pageProps) => {
 
     return(
         <>
-            {paper !== null && <a
-                className='underline text-zinc-900 text-sm underline-offset-2'
-                href={`/p/${paper.name}`}>
-                p/{paper.name}
-            </a>}
             <h1 className='font-bold text-3xl md:text-4xl h-14'>
                 r/{subreddit.name}
             </h1>
             <MiniCreatePost session={session}/>
             <PostFeed initialPosts={subreddit.posts}
-                      subredditName={subreddit.name}/>
+                      subredditName={subreddit.name}
+                      paper={paper}/>
         </>
     )
 }
