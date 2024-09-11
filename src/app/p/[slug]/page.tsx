@@ -27,7 +27,8 @@ const page = async ({params}: pageProps) => {
                 include: {
                     highlights: {
                         include: {
-                            author: true
+                            author: true,
+                            votes: true
                         }
                     }
                 }
