@@ -12,7 +12,7 @@ import {
 
 import { Tip } from "./Tip"
 
-import { Subreddit, User } from "@prisma/client";
+import { HighlightVote, Subreddit, User } from "@prisma/client";
 import { useMutation } from '@tanstack/react-query';
 
 
@@ -52,7 +52,8 @@ export interface IHighlight {
   comment: Comment
   subreddit: Subreddit,
   author: User,
-  id : string
+  id : string,
+  votes: HighlightVote[]
 }
 
 
@@ -234,6 +235,7 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
           highlights={highlights as IHighlight[]}
           selectedId={state.selectedId?.id}
           categoryLabels={state.labelMap}
+          user={user}
         />
         <div className="relative w-full">
           <div className="left-2 flex gap-2" >

@@ -1,13 +1,15 @@
 import React from "react";
-import type { ExtendedHighlight } from "@/types/db";
 import { IHighlight } from "./PaperDisplay";
-import { isUndefined } from "util";
+import HighlightVoteClient from "./highlight-vote/HighlightVoteClient";
+import { getAuthSession } from "@/lib/auth";
+import { User } from "@prisma/client";
 
 interface Props {
   highlights: Array<IHighlight>;
   highlightRefs: React.MutableRefObject<React.RefObject<HTMLLIElement>[]>;
   selectedId?: string,
-  categoryLabels: Map<string, string>
+  categoryLabels: Map<string, string>,
+  user?: User
 }
 
 const updateHash = (highlight: IHighlight) => {
@@ -18,8 +20,10 @@ export function Sidebar({
   highlights,
   highlightRefs,
   selectedId,
-  categoryLabels
+  categoryLabels,
+  user
 }: Props) {
+
   return (
     // TODO:: fix view height hack so that formatting is resilient to rescaling
     <div className="sidebar" style={{width:"20vw", height: "80vh", marginRight:"1rem", overflowY:"scroll"}}>
@@ -67,6 +71,16 @@ export function Sidebar({
             <div className="highlight__location">
               Page {highlight.position.pageNumber}
             </div>
+            <HighlightVoteClient 
+              highlightID={highlight?.id}
+              initialVoteAmt={highlight.votes.reduce((acc, vote) => {
+                if (vote.type === 'UP') return acc + 1
+                if (vote.type === 'DOWN') return acc - 1
+                return acc
+              }, 0)}
+              initialVote={highlight.votes.find(
+                (highlight) => highlight.userId === user?.id
+              )?.type}/>
             <hr></hr>
           </li>
         ))}
