@@ -1,6 +1,5 @@
 # setup
 ```
-git clone https://github.com/FrederickPu/react-pdf-highlighter-with-categories
 yarn
 cd react-pdf-highlighter-with-categories
 npm install
