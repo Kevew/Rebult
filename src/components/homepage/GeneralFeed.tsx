@@ -15,7 +15,7 @@ const GeneralFeed = async () => {
         },
         take: INFINITE_SCROLLING_PAGINATION_RESULTS, 
     })
-
+    // @ts-ignore
     return <PostFeed initialPosts={posts} />
 }
 

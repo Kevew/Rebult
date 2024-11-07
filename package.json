@@ -10,7 +10,7 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
-    "@argument-studio/react-pdf-highlighter-with-categories": "^7.1.2",
+    "@argument-studio/react-pdf-highlighter-with-categories": "file:react-pdf-highlighter-with-categories",
     "@editorjs/code": "^2.8.0",
     "@editorjs/editorjs": "^2.27.0",
     "@editorjs/embed": "^2.5.3",
@@ -58,6 +58,7 @@
     "react-dom": "18.2.0",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.44.2",
+    "react-pdf-highlighter-with-categories": "../react-pdf-highlighter-with-categories",
     "react-textarea-autosize": "^8.4.1",
     "server-only": "^0.0.1",
     "sharp": "^0.32.1",

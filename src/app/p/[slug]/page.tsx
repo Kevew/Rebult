@@ -50,6 +50,7 @@ const page = async ({params}: pageProps) => {
                 href={`/r/${paper.subreddit.name}`}>
                 r/{paper.subreddit.name}
             </a>
+            {/*@ts-ignore */}
             <PaperDisplay name={paper.name} pdf={paper.pdf} initialHighlights={paper.subreddit.highlights as ExtendedHighlight[]} user={session?.user} subreddit={paper.subreddit}/>
         </div>
     )

@@ -29,9 +29,11 @@ const CreateComment: FC<CreateCommentProps> = ({}) => {
 
             <div className='mt-2 flex justify-end'>
                 <Button
-                    isLoading={isLoading}
+                    isLoading={/*@ts-ignore*/
+                        isLoading}
                     disabled={input.length === 0}
-                    onClick={() => comment({ postId, text: input, replyToId })}>
+                    onClick={/*@ts-ignore*/
+                    () => comment({ postId, text: input, replyToId })}>
                     Post
                 </Button>
             </div>

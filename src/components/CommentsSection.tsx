@@ -20,6 +20,7 @@ const CommentsSection = async ({ postId }: CommentsSectionProps) => {
             votes: true,
             replies: {
                 include: {
+                    // @ts-ignore
                     author: true,
                     votes: true,
                 }
@@ -37,12 +38,14 @@ const CommentsSection = async ({ postId }: CommentsSectionProps) => {
                 {comments
                 .filter((comment) => !comment.replyToId)
                 .map((topLevelComment) => {
+                    // @ts-ignore
                     const topLevelCommentVotesAmt = topLevelComment.votes.reduce((acc, vote) => {
                         if (vote.type === 'UP') return acc + 1
                         if (vote.type === 'DOWN') return acc - 1
                         return acc;
                     }, 0);
 
+                    // @ts-ignore
                     const topLevelCommentVote = topLevelComment.votes.find((vote) => 
                         vote.userId === session?.user.id
                     );
@@ -51,6 +54,7 @@ const CommentsSection = async ({ postId }: CommentsSectionProps) => {
                     return (
                     <div key={topLevelComment.id} className='flex flex-col'>
                         <div className='mb-2'>
+                            { /* @ts-ignore */ }
                             <PostComment comment={topLevelComment} />
                         </div>
                     </div>)

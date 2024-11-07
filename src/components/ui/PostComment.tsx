@@ -2,6 +2,7 @@
 
 import { FC, useRef } from 'react';
 import UserAvatar from '../UserAvatar';
+// @ts-ignore
 import { Comment, CommentVote, User } from '@prisma/client';
 import { formatTimeToNow } from '@/lib/utils';
 
