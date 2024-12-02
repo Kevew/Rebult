@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import { Rnd } from "react-rnd";
-import { getPageFromElement } from "../../../react-pdf-highlighter-with-categories/src/lib/pdfjs-dom";
+//import { getPageFromElement } from "../../../react-pdf-highlighter-with-categories/src/lib/pdfjs-dom";
 
 // import "../../../react-pdf-highlighter-with-categories/style/AreaHighlight.css"
 
