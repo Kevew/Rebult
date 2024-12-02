@@ -58,7 +58,6 @@
     "react-dom": "18.2.0",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.44.2",
-    "react-pdf-highlighter-with-categories": "../react-pdf-highlighter-with-categories",
     "react-textarea-autosize": "^8.4.1",
     "server-only": "^0.0.1",
     "sharp": "^0.32.1",
