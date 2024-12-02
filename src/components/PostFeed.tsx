@@ -77,6 +77,7 @@ const PostFeed: FC<PostFeedProps> = ({initialPosts, subredditName}) => {
             }else{
                 return <PostElement 
                         subredditName={post.subreddit.name}
+                        key={index}
                         post={post}
                         commentAmt={post.comments.length}
                         currentVote={currentVote}
