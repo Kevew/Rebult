@@ -28,6 +28,7 @@ jobs:
           cd ./react-pdf-highlighter-with-categories
           npm install
           npm run build
+          rm -rf .next/cache
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
