@@ -28,12 +28,15 @@ const style = {
 
 const EditorOutput: FC<EditorOutputProps> = ({ content }) => {
   return (
+    /*
     <Output
       style={style}
       className='text-sm'
       renderers={renderers}
       data={content}
     />
+  )*/
+ <></>
   )
 }
 
