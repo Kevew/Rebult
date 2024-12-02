@@ -21,8 +21,9 @@ jobs:
           lfs: false
       - name: Clone react-pdf-highlighter-with-categories Submodule
         run: |
-          git submodule update --init --recursive
           cd ./react-pdf-highlighter-with-categories
+          npm install
+          npm run build
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
