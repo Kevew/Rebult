@@ -37,9 +37,8 @@ jobs:
       - name: Install and Build
         run: |
           npm install
-          npm run build
           npm install -g @azure/static-web-apps-cli
-          swa deploy ./.next --env production
+          swa build --app-location ./ --output-location ./build --skip-auth
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
