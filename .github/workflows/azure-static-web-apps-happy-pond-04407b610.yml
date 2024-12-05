@@ -38,7 +38,6 @@ jobs:
         run: |
           npm install
           npm run build
-          cp -r .next .github/workflows/.next
       
       # Deploy to Azure Static Web Apps
       - name: Deploy to Azure Static Web Apps
@@ -48,7 +47,6 @@ jobs:
           action: "upload"
           skip_app_build: true
           skip_api_build: true
-          output_location: ".next"
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
