@@ -33,6 +33,10 @@ jobs:
           npm install
           npm run build
       
+      - name: Copy project to /github/workspace
+        run: |
+          cp -r . /github/workspace/
+      
       # Install dependencies and build the project
       - name: Install and Build
         run: |
