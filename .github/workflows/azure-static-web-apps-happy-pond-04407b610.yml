@@ -38,6 +38,7 @@ jobs:
         run: |
           npm install
           npm run build
+        working-directory: /github/workspace
       
       # Deploy to Azure Static Web Apps
       - name: Deploy to Azure Static Web Apps
