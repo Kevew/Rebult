@@ -33,17 +33,11 @@ jobs:
           npm install
           npm run build
       
-      - name: Copy project to /github/workspace
-        run: |
-          sudo mkdir -p /github/workspace/
-          sudo cp -r ./* /github/workspace/
-      
       # Install dependencies and build the project
       - name: Install and Build
         run: |
           npm install
           npm run build
-        working-directory: /github/workspace
       
       # Deploy to Azure Static Web Apps
       - name: Deploy to Azure Static Web Apps
@@ -51,6 +45,7 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_HAPPY_POND_04407B610 }}
           action: "upload"
+          app_location: ".next"
           skip_app_build: true
           skip_api_build: true
 
