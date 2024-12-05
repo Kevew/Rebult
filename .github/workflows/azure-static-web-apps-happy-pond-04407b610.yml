@@ -35,8 +35,8 @@ jobs:
       
       - name: Copy project to /github/workspace
         run: |
-          mkdir -p /github/workspace/
-          cp -r ./* /github/workspace/
+          sudo mkdir -p /github/workspace/
+          sudo cp -r ./* /github/workspace/
       
       # Install dependencies and build the project
       - name: Install and Build
