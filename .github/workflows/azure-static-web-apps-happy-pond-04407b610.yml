@@ -52,6 +52,12 @@ jobs:
           app_location: "build"
           app_artifact_location: ".next"
           skip_app_build: true
+      
+      - name: Force include `.next` in deployment
+        run: |
+          git add --force build/.next
+          git add --force build/.next/**/*
+
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
