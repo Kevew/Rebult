@@ -15,11 +15,20 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+              submodules: true
+              lfs: false
 
       - name: Set up Node.js version
         uses: actions/setup-node@v3
         with:
           node-version: '20.x'
+
+      - name: Build react-pdf-highlighter-with-categories
+        run: |
+          cd react-pdf-highlighter-with-categories
+          npm install
+          npm run build
 
       - name: npm install, build, and test
         run: |
