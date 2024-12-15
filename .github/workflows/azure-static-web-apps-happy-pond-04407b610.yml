@@ -38,7 +38,7 @@ jobs:
         run: |
           npm install
           npm run build
-          cp .next build/.next
+          cp -r .next build/.next
           cp package.json build/package.json
       
       # Deploy to Azure Static Web Apps
