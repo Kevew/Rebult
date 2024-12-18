@@ -66,6 +66,5 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'Rebutl'
-          slot-name: 'Production'
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A971F3360F344D829651C810BF076E72 }}
