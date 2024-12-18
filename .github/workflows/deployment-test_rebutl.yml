@@ -68,3 +68,5 @@ jobs:
           app-name: 'Rebutl'
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A971F3360F344D829651C810BF076E72 }}
+    env:
+      ACTIONS_STEP_DEBUG: true
