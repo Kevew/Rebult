@@ -8,7 +8,7 @@ import {
    ScaledPosition,
    Content,
    Comment
-  } from "../../../react-pdf-highlighter-with-categories";
+  } from "@argument-studio/react-pdf-highlighter-with-categories";
 
 import { Tip } from "./Tip"
 
@@ -91,6 +91,7 @@ const HighlightPopup = ({
 export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlights, subreddit}) => {
   const [state, setState] = React.useState<State>({
     data: null,
+    // @ts-ignore
     highlights: initialHighlights as IHighlight[],
     labelMap: (() => {
       let lol = new Map();
@@ -177,6 +178,7 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
 
     createHighlight({ highlight, id})
 
+    // @ts-ignore
     setState((prev) => {
       const { highlights } = prev;
       console.log("Saving highlight", highlight);
@@ -229,6 +231,7 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
         <Button className="bg-gray-400 text-zinc-700 hover:bg-gray-300 self-end mt-1" onClick={() => setState(prev => ({ ...prev, selectedId:undefined }))} disabled={state.selectedId?.mode !== "click"}>Clear selected comment</Button>
         <button onClick={() => {ref.current?.scrollIntoView()}}>fullscreen</button>
       </div>
+      {/*@ts-ignore*/}
       <div className="flex w-full h-full" ref={ref}>
         <Sidebar
           highlightRefs={commentRefs}
@@ -397,8 +400,9 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
                       }
                       onMouseOut={hideTip}
                       key={index}
-                      children={component}
-                    />
+                    >
+                      {component}
+                    </Popup>
                   );
                 }}
                 highlights={highlights}

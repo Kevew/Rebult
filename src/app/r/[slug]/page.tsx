@@ -38,7 +38,9 @@ const page = async ({params}: pageProps) => {
 
     if(!subreddit) return notFound()
 
+    // @ts-ignore
     const paper = subreddit.paperId !== null ? await db.paper.findFirst({
+        // @ts-ignore
         where : {id : subreddit.paperId}
     }) : null
 
