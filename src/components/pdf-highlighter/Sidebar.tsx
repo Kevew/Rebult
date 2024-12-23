@@ -73,14 +73,14 @@ export function Sidebar({
             </div>
             <HighlightVoteClient 
               highlightID={highlight?.id}
-              initialVoteAmt={highlight.votes.reduce((acc, vote) => {
+              initialVoteAmt={highlight.votes? highlight.votes.reduce((acc, vote) => {
                 if (vote.type === 'UP') return acc + 1
                 if (vote.type === 'DOWN') return acc - 1
                 return acc
-              }, 0)}
-              initialVote={highlight.votes.find(
+              }, 0): 0}
+              initialVote={highlight.votes? highlight.votes.find(
                 (highlight) => highlight.userId === user?.id
-              )?.type}/>
+              )?.type: undefined}/>
             <hr></hr>
           </li>
         ))}

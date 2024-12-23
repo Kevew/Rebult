@@ -9,7 +9,7 @@ export async function POST(req: Request) {
 
         // Is the user logged in
         if (!session?.user) {
-        return new Response('Unauthorized', { status: 401 })
+            return new Response('Unauthorized', { status: 401 })
         }
 
         const body = await req.json();
@@ -17,14 +17,14 @@ export async function POST(req: Request) {
 
         // check if subreddit already exists
         const subredditExists = await db.subreddit.findFirst({
-        where: {
-            name,
-        },
+            where: {
+                name,
+            },
         })
 
         // If the subreddit exists then return immediately
         if (subredditExists) {
-        return new Response('Subreddit already exists', { status: 409 })
+            return new Response('Subreddit already exists', { status: 409 })
         }
         
         const data = { name, creatorId: session.user.id }
@@ -34,10 +34,10 @@ export async function POST(req: Request) {
 
         // creator also has to be subscribed
         await db.subscription.create({
-        data: {
-            userId: session.user.id,
-            subredditId: subreddit.id,
-        },
+            data: {
+                userId: session.user.id,
+                subredditId: subreddit.id,
+            },
         })
 
         return new Response(subreddit.name)

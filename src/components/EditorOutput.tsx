@@ -1,36 +1,16 @@
 'use client'
 
-import CustomCodeRenderer from '@/components/renderers/CustomCodeRenderer'
-import CustomImageRenderer from '@/components/renderers/CustomImageRenderer'
-import { FC } from 'react'
+import { FC } from 'react';
 
 interface EditorOutputProps {
   content: any
 }
 
-const renderers = {
-  image: CustomImageRenderer,
-  code: CustomCodeRenderer,
-}
-
-const style = {
-  paragraph: {
-    fontSize: '0.875rem',
-    lineHeight: '1.25rem',
-  },
-}
-
 const EditorOutput: FC<EditorOutputProps> = ({ content }) => {
   return (
-    /*
-    <Output
-      style={style}
-      className='text-sm'
-      renderers={renderers}
-      data={content}
-    />
-  )*/
- <></>
+    <div className='whitespace-pre-wrap'>
+      {content}
+    </div>
   )
 }
 

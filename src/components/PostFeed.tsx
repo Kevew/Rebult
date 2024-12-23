@@ -2,7 +2,7 @@
 
 import { ExtendedPost } from '@/types/db';
 import { FC, useEffect, useRef } from 'react';
-import { useIntersection, useReducedMotion } from '@mantine/hooks';
+import { useIntersection } from '@mantine/hooks';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { INFINITE_SCROLLING_PAGINATION_RESULTS } from '@/config';
 import axios from 'axios';
@@ -81,8 +81,7 @@ const PostFeed: FC<PostFeedProps> = ({initialPosts, subredditName}) => {
                         post={post}
                         commentAmt={post.comments.length}
                         currentVote={currentVote}
-                        votesAmt={votesAmt}
-                        key={index} />
+                        votesAmt={votesAmt} />
             }
         })}
     </ul>
