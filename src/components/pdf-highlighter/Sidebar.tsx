@@ -1,7 +1,6 @@
 import React from "react";
 import { IHighlight } from "./PaperDisplay";
 import HighlightVoteClient from "./highlight-vote/HighlightVoteClient";
-import { getAuthSession } from "@/lib/auth";
 import { User } from "@prisma/client";
 
 interface Props {
@@ -50,9 +49,9 @@ export function Sidebar({
             style={highlight.id == selectedId ? {backgroundColor: categoryLabels.get(highlight.author.id)} : undefined}
             onClick={() => {
               updateHash(highlight);
-            }}
-          >
-            <div>
+          }}>
+
+          <div>
               <strong>{highlight.comment.text} - {highlight.author.name}</strong>
               {highlight.content.text ? (
                 <blockquote style={{ marginTop: "0.5rem" }}>
@@ -62,16 +61,15 @@ export function Sidebar({
               {highlight.content.image ? (
                 <div
                   className="highlight__image"
-                  style={{ marginTop: "0.5rem" }}
-                >
+                  style={{ marginTop: "0.5rem" }}>
                   <img src={highlight.content.image} alt={"Screenshot"} />
                 </div>
               ) : null}
-            </div>
-            <div className="highlight__location">
+          </div>
+          <div className="highlight__location">
               Page {highlight.position.pageNumber}
-            </div>
-            <HighlightVoteClient 
+          </div>
+          <HighlightVoteClient 
               highlightID={highlight?.id}
               initialVoteAmt={highlight.votes? highlight.votes.reduce((acc, vote) => {
                 if (vote.type === 'UP') return acc + 1
@@ -80,8 +78,9 @@ export function Sidebar({
               }, 0): 0}
               initialVote={highlight.votes? highlight.votes.find(
                 (highlight) => highlight.userId === user?.id
-              )?.type: undefined}/>
-            <hr></hr>
+              )?.type: undefined}
+          />
+          <hr></hr>
           </li>
         ))}
       </ul>

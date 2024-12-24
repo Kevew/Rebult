@@ -10,7 +10,9 @@ import {
    Comment
   } from "@argument-studio/react-pdf-highlighter-with-categories";
 
-import { Tip } from "./Tip"
+import { Tip } from "./Tip";
+
+import optionIcon from '../../../public/Option.svg';
 
 import { HighlightVote, Subreddit, User } from "@prisma/client";
 import { useMutation } from '@tanstack/react-query';
@@ -56,19 +58,22 @@ export interface IHighlight {
   votes: HighlightVote[]
 }
 
+interface HighlightPopupProps{
+  comment: {
+    text: string,
+    category: string
+  }
+}
 
-const HighlightPopup = ({
-  comment,
-}: {
-  comment: { text: string; category: string };
-}) =>
-  comment.text ? (
-    <div className="Highlight__popup">
-      {comment.category} {comment.text}
-    </div>
-  ) : null;
+const HighlightPopup = ({ comment }: HighlightPopupProps) => 
+    comment.text ? (
+        <div className="Highlight__popup">
+          {comment.category} {comment.text}
+        </div>
+    ) : null;
 
-  interface PaperProps {
+
+interface PaperProps {
     name : string,
     pdf : string,
     initialHighlights: ExtendedHighlight[],
@@ -77,16 +82,15 @@ const HighlightPopup = ({
     user?: User
 }
 
-  interface State {
+interface State {
     data: Uint8Array | null;
     highlights: Array<IHighlight>;
     labelMap: Map<string, string>;
     destinationPage: number;
     pageCount: number;
     currentPage: number;
-    flag: boolean;
     selectedId?: { id: string; mode: "click" | "hover" };
-  }
+}
 
 export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlights, subreddit}) => {
   const [state, setState] = React.useState<State>({
@@ -106,7 +110,6 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
     destinationPage: 1,
     pageCount: 0,
     currentPage: 1,
-    flag: false,
   });
 
   const ref = React.useRef<HTMLDivElement>();
@@ -116,7 +119,7 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
   let scrollViewerTo = (highlight: any) => { };
 
   const scrollToHighlightFromHash = () => {
-    const highlight = getHighlightById(parseIdFromHash());
+    const highlight = getHighlightIndex(parseIdFromHash());
 
     if (highlight) {
       scrollViewerTo(highlight);
@@ -129,13 +132,25 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
       scrollToHighlightFromHash,
       false
     );
+
+    const handleOutsideClick = (event: MouseEvent) => {
+      const menuButton = document.getElementById("menu-button");
+      const dropdownMenu = document.getElementById("dropdown-menu");
+
+      if (
+        dropdownMenu && menuButton &&
+        !dropdownMenu.contains(event.target as Node) &&
+        !menuButton.contains(event.target as Node)
+      ) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    }
   }, [])
-
-  function getHighlightById(id: string) {
-    const { highlights } = state;
-
-    return highlights.find((highlight) => highlight.id === id);
-  }
 
   const { mutate: createHighlight, isLoading } = useMutation({
     mutationFn : async ({ highlight, id } : {highlight : NewHighlight; id : string}) => {
@@ -192,12 +207,9 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
   }
 
   function getHighlightIndex(highlightId: string): number {
-    for (let index = 0; index < highlights.length; index++) {
-      if (highlights[index].id === highlightId)
-        return index
-    }
-    return 0
+    return state.highlights.findIndex((highlight) => highlight.id === highlightId);
   }
+
   function updateHighlight(highlightId: string, position: Object, content: Object) {
     console.log("Updating highlight", highlightId, position, content);
 
@@ -224,13 +236,11 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
 
   const { highlights, data } = state;
 
+  const [isDropdownOpen, setDropdownOpen] = React.useState(false);
+  const [flag, setFlag] = React.useState(false);
+
   return (
     <div className="App" style={{display:"flex", flexDirection:"column"}}>
-      <div style={{display:"flex", justifyContent:"flex-end", gap:"0.5rem"}}>
-        <Button className="bg-gray-400 text-zinc-700 hover:bg-gray-300 self-end" onClick={() => setState(prev => ({ ...prev, flag: !prev.flag }))} disabled={user === undefined}>toggle mode {state.flag || user === undefined ? "view only" : "suggest only"}</Button>
-        <Button className="bg-gray-400 text-zinc-700 hover:bg-gray-300 self-end mt-1" onClick={() => setState(prev => ({ ...prev, selectedId:undefined }))} disabled={state.selectedId?.mode !== "click"}>Clear selected comment</Button>
-        <button onClick={() => {ref.current?.scrollIntoView()}}>fullscreen</button>
-      </div>
       {/*@ts-ignore*/}
       <div className="flex w-full h-full" ref={ref}>
         <Sidebar
@@ -241,26 +251,57 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
           user={user}
         />
         <div className="relative w-full">
-          <div className="left-2 flex gap-2" >
+          <div className="left-2 flex gap-2 my-2" >
+            <div className="relative inline-block text-left">
+              <Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" 
+                disabled={user === undefined}
+                onClick={() => 
+                  setDropdownOpen((prev) => !prev)
+                }
+                id="menu-button" aria-expanded="true" aria-haspopup="true">
+                  <div className="text-sm font-semibold text-gray-900">
+                    {flag || user === undefined ? "View" : "Suggestion "}
+                  </div> 
+                  <svg className="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                    <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                  </svg>
+              </Button>
+              {isDropdownOpen &&
+              <div className="absolute left-0 z-10 mt-2 w-56 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none" 
+              role="menu" aria-orientation="vertical" aria-labelledby="menu-button" id="dropdown-menu">
+                <div className="py-1" role="none">
+                  <a href="#" className="block px-4 py-2 text-sm text-gray-700" 
+                  onClick={() => {setFlag(true)
+                  setDropdownOpen(false)}}
+                  role="menuitem" id="menu-item-0">View</a>
+                  <a href="#" className="block px-4 py-2 text-sm text-gray-700" 
+                  onClick={() => {setFlag(false)
+                  setDropdownOpen(false)}}
+                  role="menuitem" id="menu-item-1">Suggestion</a>
+                </div>
+              </div> }
+            </div> 
+            <Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" 
+              onClick={() => setState(prev => ({ ...prev, selectedId:undefined }))}
+              disabled={state.selectedId?.mode !== "click"}>
+              Unselect Comment
+            </Button>
             <Button
-              className="bg-gray-400 text-zinc-700 h-0.5 hover:bg-gray-300"
+              className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
               onClick={() =>
                 setState((prev) => ({
                   ...prev,
                   destinationPage: prev.currentPage > 1 ? prev.currentPage - 1 : 1,
                 }))
               }
-            >
-              Decrease
+              content="Decrease">Decrease</Button>
+            <Button
+              className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+              disabled>
+              {"Page: " + state.currentPage}
             </Button>
             <Button
-              className="bg-gray-400 text-zinc-700 h-0.5 hover:bg-gray-300"
-              disabled
-            >
-              {"Current page: " + state.currentPage}
-            </Button>
-            <Button
-              className="bg-gray-400 text-zinc-700 h-0.5 hover:bg-gray-300"
+              className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
               onClick={() =>
                 setState((prev) => ({
                   ...prev,
@@ -274,16 +315,9 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
               Increase
             </Button>
             <Button
-              className="bg-gray-400 text-zinc-700 h-0.5 hover:bg-gray-300"
-              disabled
-            >
-              {"Pages: " + state.pageCount}
-            </Button>
-            <Button
-              className="bg-gray-400 text-zinc-700 h-0.5 hover:bg-gray-300"
-              onClick={() => setState((prev) => ({ ...prev, destinationPage: 1 }))}
-            >
-              Back to Page 1
+              className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+              disabled>
+              {"Total Pages: " + state.pageCount}
             </Button>
           </div>
           <PdfLoader url={pdf} beforeLoad={<></>/*<Spinner />*/} data={data}>
@@ -343,7 +377,7 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
                       position={highlight.position}
                       comment={highlight.comment}
                       categoryLabels={getCategoryLabels(state.labelMap)}
-                      pointerEvents={state.flag}
+                      pointerEvents={flag}
                       authorId={highlight.author ? highlight.author.id : user!.id}
                       onClick={() => { 
                         commentRefs.current[getHighlightIndex(highlight.id)].current?.scrollIntoView({
@@ -406,7 +440,7 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
                   );
                 }}
                 highlights={highlights}
-                selectionMode={!state.flag && user !== undefined}
+                selectionMode={!flag && user !== undefined}
               />
             )}
           </PdfLoader>
