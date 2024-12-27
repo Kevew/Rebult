@@ -1,7 +1,7 @@
 'use client'
 
 import { User } from '@prisma/client';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import UserAvatar from '../UserAvatar';
 import AboutMe from './AboutMe';
 import PrivateAccountDisplay from './PrivateAccountDisplay';

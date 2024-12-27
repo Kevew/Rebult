@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { IHighlight } from "./PaperDisplay";
 import HighlightVoteClient from "./highlight-vote/HighlightVoteClient";
 import { User } from "@prisma/client";
@@ -8,7 +8,8 @@ interface Props {
   highlightRefs: React.MutableRefObject<React.RefObject<HTMLLIElement>[]>;
   selectedId?: string,
   categoryLabels: Map<string, string>,
-  user?: User
+  user?: User,
+  commentOpen: Function
 }
 
 const updateHash = (highlight: IHighlight) => {
@@ -20,7 +21,8 @@ export function Sidebar({
   highlightRefs,
   selectedId,
   categoryLabels,
-  user
+  user,
+  commentOpen
 }: Props) {
 
   return (
@@ -69,20 +71,30 @@ export function Sidebar({
           <div className="highlight__location">
               Page {highlight.position.pageNumber}
           </div>
-          <HighlightVoteClient 
-              highlightID={highlight?.id}
-              initialVoteAmt={highlight.votes? highlight.votes.reduce((acc, vote) => {
-                if (vote.type === 'UP') return acc + 1
-                if (vote.type === 'DOWN') return acc - 1
-                return acc
-              }, 0): 0}
-              initialVote={highlight.votes? highlight.votes.find(
-                (highlight) => highlight.userId === user?.id
-              )?.type: undefined}
-          />
-          <hr></hr>
+          <div className="relative h-max w-max">
+            <button
+              className="inline-flex w-1/2 justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-400"
+              onClick={() => {commentOpen(highlight)
+                console.log(highlight);
+              }}>
+              Comments
+            </button>
+            <HighlightVoteClient 
+                highlightID={highlight?.id}
+                initialVoteAmt={highlight.votes? highlight.votes.reduce((acc, vote) => {
+                  if (vote.type === 'UP') return acc + 1
+                  if (vote.type === 'DOWN') return acc - 1
+                  return acc
+                }, 0): 0}
+                initialVote={highlight.votes? highlight.votes.find(
+                  (highlight) => highlight.userId === user?.id
+                )?.type: undefined}
+            />
+          </div>
           </li>
         ))}
+
+
       </ul>
     </div>
   );

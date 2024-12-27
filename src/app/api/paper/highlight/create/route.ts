@@ -1,7 +1,6 @@
 import { getAuthSession } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { HighlightValidator } from '@/lib/validators/highlight'
-import { NewHighlight } from "@argument-studio/react-pdf-highlighter-with-categories"
 import { z } from 'zod'
 
 export async function POST(req: Request) {

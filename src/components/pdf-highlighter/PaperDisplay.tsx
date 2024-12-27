@@ -30,6 +30,7 @@ import * as React from "react"
 import axios from "axios";
 import { toast } from "@/hooks/use-toast";
 import { Button } from "../ui/Button";
+import { HighlightCommentSection } from "./HighlightComment/HighlightCommentSection";
 
 const getNextId = () => String(Math.random()).slice(2);
 const parseIdFromHash = () =>
@@ -239,8 +240,13 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
   const [isDropdownOpen, setDropdownOpen] = React.useState(false);
   const [flag, setFlag] = React.useState(false);
 
+  const [isOpenComment, setIsOpenComment] = React.useState<IHighlight | null>(null);
+
   return (
     <div className="App" style={{display:"flex", flexDirection:"column"}}>
+      {isOpenComment != null && 
+      <HighlightCommentSection closeComment={setIsOpenComment}
+        highlight={isOpenComment}/>}
       {/*@ts-ignore*/}
       <div className="flex w-full h-full" ref={ref}>
         <Sidebar
@@ -249,6 +255,7 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
           selectedId={state.selectedId?.id}
           categoryLabels={state.labelMap}
           user={user}
+          commentOpen={setIsOpenComment}
         />
         <div className="relative w-full">
           <div className="left-2 flex gap-2 my-2" >

@@ -9,7 +9,7 @@ export async function POST(req: Request) {
 
         // Is the user logged in
         if (!session?.user) {
-        return new Response('Unauthorized', { status: 401 })
+            return new Response('Unauthorized', { status: 401 })
         }
 
         const body = await req.json();
@@ -17,14 +17,14 @@ export async function POST(req: Request) {
 
         // check if subreddit already exists
         const subredditExists = await db.paper.findFirst({
-        where: {
-            name,
-        },
+            where: {
+                name,
+            },
         })
 
         // If the subreddit exists then return immediately
         if (subredditExists) {
-        return new Response('Subreddit already exists', { status: 409 })
+            return new Response('Subreddit already exists', { status: 409 })
         }
 
         const subreddit = await db.subreddit.create({
@@ -52,7 +52,7 @@ export async function POST(req: Request) {
         return new Response(paper.name)
     } catch (error) {
         if (error instanceof z.ZodError) {
-        return new Response(error.message, { status: 422 })
+            return new Response(error.message, { status: 422 })
         }
 
         return new Response('Could not create paper', { status: 500 })

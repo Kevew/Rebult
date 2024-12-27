@@ -9,7 +9,7 @@ import { CachedPost } from '@/types/redis';
 import { Post, User, Vote } from '@prisma/client';
 import { ArrowBigDown, ArrowBigUp, Loader2 } from 'lucide-react';
 import { notFound } from 'next/navigation';
-import { FC, Suspense } from 'react';
+import { Suspense } from 'react';
 
 interface PageProps {
     params: {

@@ -1,5 +1,4 @@
 import { Paper } from '@prisma/client';
-import FC from 'react';
 
 interface PaperElementProps{
     data: Paper

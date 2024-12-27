@@ -181,7 +181,7 @@ model HighlightVote {
 
 model HighlightComment {
   id        String   @id @default(cuid())
-  content   Json
+  content   String
   createdAt DateTime @default(now())
 
   author    User     @relation(fields: [authorId], references: [id])
