@@ -12,7 +12,6 @@ type PaperWithAuthor = Prisma.PaperGetPayload<{
 }>;
 
 const DiscoverList = ({papers}: DiscoverListProps) => {
-
     return (
         <ul>
             {papers && papers.map((paper) => {
