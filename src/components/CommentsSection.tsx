@@ -17,12 +17,10 @@ const CommentsSection = async ({ postId }: CommentsSectionProps) => {
         },
         include: {
             author: true,
-            votes: true,
             replies: {
                 include: {
                     // @ts-ignore
                     author: true,
-                    votes: true,
                 }
             }
         }

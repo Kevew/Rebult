@@ -12,9 +12,9 @@ const CreateComment: FC<CreateCommentProps> = ({}) => {
 
     const [input, setInput] = useState<string>('');
 
-    const {} = useMutation({
+    const {isLoading} = useMutation({
         
-    })
+    });
 
     return <div className='grid w-full gap-1.5'>
         <Label htmlFor = 'comment'> Your comment</Label>
