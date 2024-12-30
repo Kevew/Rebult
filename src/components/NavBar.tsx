@@ -20,6 +20,12 @@ const Navbar = async () => {
                     </p>
                 </Link>
 
+                <Link href='/discover' className="flex gap-2 items-center">
+                    <p className="hidden text-zinc-700 text-sm font-medium md:block underline">
+                        Discover
+                    </p>
+                </Link>
+
                 {/*  search bar   */}
 
                 {session?.user ? 
