@@ -27,13 +27,8 @@ export async function GET(req: Request) {
             },
         });
 
-        if (!comments.length) {
-            return new Response('No comments found for this highlight', { status: 404 });
-        }
-
         return new Response(JSON.stringify(comments), { status: 200 });
     } catch (error) {
-        console.error('Error fetching comments:', error);
         return new Response('Could not fetch comments', { status: 500 });
     }
 }

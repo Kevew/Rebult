@@ -21,7 +21,7 @@ const HighlightComments = ({highlight}: HighlightCommentsProps) => {
         ["comments", highlight.id],
         async () => {
             const { data } = await axios.get(`/api/paper/highlight/comment/getAll?highlightID=${highlight.id}`);
-            return data as HighlightCommentWithRelations[];
+            return data as HighlightCommentWithRelations[] | null;
         },
     )
 
@@ -31,6 +31,14 @@ const HighlightComments = ({highlight}: HighlightCommentsProps) => {
 
     if (error instanceof Error) {
         return (<div>Error: {error.message}</div>);
+    }
+
+    if (fetchedComments?.length == 0) {
+        return (
+            <div className="flex flex-col gap-y-6 mt-4">
+                <div>There are no comments yet! Be the first one.</div>
+            </div>
+        );
     }
 
     return (

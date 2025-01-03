@@ -3,6 +3,7 @@ import { getAuthSession } from '@/lib/auth'
 import { db } from '@/lib/db'
 import PostFeed from '../PostFeed'
 import { notFound } from 'next/navigation'
+import NoPostHomePage from './NoPostHomePage'
 
 const CustomFeed = async () => {
     const session = await getAuthSession()
@@ -38,8 +39,12 @@ const CustomFeed = async () => {
         },
         take: INFINITE_SCROLLING_PAGINATION_RESULTS,
     })
-    // @ts-ignore
-    return <PostFeed initialPosts={posts} />
+    return (
+        <>
+            {/** @ts-ignore */}
+            {posts.length == 0? <NoPostHomePage />: <PostFeed initialPosts={posts}/>}
+        </>
+    )
 }
 
 export default CustomFeed

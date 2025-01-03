@@ -9,6 +9,7 @@ import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import PostElement from './PostElement';
 import { Paper } from '@prisma/client';
+import { Loader2 } from 'lucide-react';
 
 interface PostFeedProps {
     initialPosts: ExtendedPost[],
@@ -51,40 +52,49 @@ const PostFeed: FC<PostFeedProps> = ({initialPosts, subredditName}) => {
     const posts = data?.pages.flatMap((page) => page) ?? initialPosts
 
     return (
-        <ul className='flex flex-col col-span-2 space-y-6'>
-        {posts.map((post, index) => {
-            const votesAmt = post.votes.reduce((acc, vote) => {
-                if (vote.type === 'UP') return acc + 1
-                if (vote.type === 'DOWN') return acc - 1
-                return acc
-            }, 0)
+        <>
+            {isFetchingNextPage && (
+                <li className='flex justify-center'>
+                <Loader2 className='w-6 h-6 text-zinc-500 animate-spin' />
+                </li>
+            )}
+            {posts.length == 0 ? <div>No Posts Found
+            </div> : 
+            <ul className='flex flex-col col-span-2 space-y-6'>            
+                {posts.map((post, index) => {
+                    const votesAmt = post.votes.reduce((acc, vote) => {
+                        if (vote.type === 'UP') return acc + 1
+                        if (vote.type === 'DOWN') return acc - 1
+                        return acc
+                    }, 0)
 
-            const currentVote = post.votes.find(
-                (vote) => vote.userId === session?.user.id
-            )
+                    const currentVote = post.votes.find(
+                        (vote) => vote.userId === session?.user.id
+                    )
 
-            if(index === posts.length - 1){
-                return (
-                    <li key={post.id} ref={ref}>
-                        <PostElement 
-                        subredditName={post.subreddit.name}
-                        post={post}
-                        commentAmt={post.comments.length}
-                        currentVote={currentVote}
-                        votesAmt={votesAmt}/>
-                    </li>
-                )
-            }else{
-                return <PostElement 
-                        subredditName={post.subreddit.name}
-                        key={index}
-                        post={post}
-                        commentAmt={post.comments.length}
-                        currentVote={currentVote}
-                        votesAmt={votesAmt} />
-            }
-        })}
-    </ul>
+                    if(index === posts.length - 1){
+                        return (
+                            <li key={post.id} ref={ref}>
+                                <PostElement 
+                                subredditName={post.subreddit.name}
+                                post={post}
+                                commentAmt={post.comments.length}
+                                currentVote={currentVote}
+                                votesAmt={votesAmt}/>
+                            </li>
+                        )
+                    }else{
+                        return <PostElement 
+                                subredditName={post.subreddit.name}
+                                key={index}
+                                post={post}
+                                commentAmt={post.comments.length}
+                                currentVote={currentVote}
+                                votesAmt={votesAmt} />
+                    }
+                })}
+            </ul>}
+        </>
     )
 }
 

@@ -21,7 +21,7 @@ const TopPapers = ({profile}: TopPapersProps) => {
     const { loginToast } = useCustomToasts();
     const router = useRouter();
 
-    const {data, mutate: getPapers, isLoading: isPapersLoading } = useMutation({
+    const {data, mutate: getPapers } = useMutation({
         mutationFn: async () => {
             if(profile.id === null){
                 return;

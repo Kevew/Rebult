@@ -44,8 +44,6 @@ export async function POST(req: Request) {
             return new Response(error.message, { status: 400 })
         }
 
-        console.log(error)
-
         return new Response(
             'Could not highlight to subreddit at this time. Please try later',
             { status: 500 }

@@ -32,7 +32,7 @@ export default async function Home() {
                         favorite communities.
                       </p>
                     </div>
-
+                    
                     <Link
                       className={buttonVariants({
                         className: 'w-full mt-4 mb-6',

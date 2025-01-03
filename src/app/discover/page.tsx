@@ -20,7 +20,6 @@ const page = async ({}: pageProps) => {
                 <div className="text-[21px] font-medium pb-[7px] pl-[2px]">
                     Recent
                 </div>
-                {/* list of papers */}
             </div>
             <DiscoverList papers={paperInformation}/>
         </div>

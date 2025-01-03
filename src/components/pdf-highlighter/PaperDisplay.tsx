@@ -12,8 +12,6 @@ import {
 
 import { Tip } from "./Tip";
 
-import optionIcon from '../../../public/Option.svg';
-
 import { HighlightVote, Subreddit, User } from "@prisma/client";
 import { useMutation } from '@tanstack/react-query';
 
@@ -25,12 +23,13 @@ import { Sidebar } from "./Sidebar";
 
 import { ExtendedHighlight } from "@/types/db";
 
-import { FC } from "react"
-import * as React from "react"
+import { FC } from "react";
+import * as React from "react";
 import axios from "axios";
 import { toast } from "@/hooks/use-toast";
 import { Button } from "../ui/Button";
 import { HighlightCommentSection } from "./HighlightComment/HighlightCommentSection";
+import { HighlightDropDown } from "./HighlightDropDown";
 
 const getNextId = () => String(Math.random()).slice(2);
 const parseIdFromHash = () =>
@@ -134,24 +133,7 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
       false
     );
 
-    const handleOutsideClick = (event: MouseEvent) => {
-      const menuButton = document.getElementById("menu-button");
-      const dropdownMenu = document.getElementById("dropdown-menu");
-
-      if (
-        dropdownMenu && menuButton &&
-        !dropdownMenu.contains(event.target as Node) &&
-        !menuButton.contains(event.target as Node)
-      ) {
-        setDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleOutsideClick);
-    return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-    }
-  }, [])
+  }, []);
 
   const { mutate: createHighlight, isLoading } = useMutation({
     mutationFn : async ({ highlight, id } : {highlight : NewHighlight; id : string}) => {
@@ -161,7 +143,7 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
         subredditId : subreddit.id
       }
       try {
-        const { data } = await axios.post('/api/paper/highlight/create', payload)
+        await axios.post('/api/paper/highlight/create', payload)
       } catch (e) {
         throw id;
       }
@@ -237,7 +219,6 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
 
   const { highlights, data } = state;
 
-  const [isDropdownOpen, setDropdownOpen] = React.useState(false);
   const [flag, setFlag] = React.useState(false);
 
   const [isOpenComment, setIsOpenComment] = React.useState<IHighlight | null>(null);
@@ -259,35 +240,13 @@ export const PaperDisplay : FC<PaperProps> = ({name, user, pdf, initialHighlight
         />
         <div className="relative w-full">
           <div className="left-2 flex gap-2 my-2" >
-            <div className="relative inline-block text-left">
-              <Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" 
-                disabled={user === undefined}
-                onClick={() => 
-                  setDropdownOpen((prev) => !prev)
-                }
-                id="menu-button" aria-expanded="true" aria-haspopup="true">
-                  <div className="text-sm font-semibold text-gray-900">
-                    {flag || user === undefined ? "View" : "Suggestion "}
-                  </div> 
-                  <svg className="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                    <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-                  </svg>
-              </Button>
-              {isDropdownOpen &&
-              <div className="absolute left-0 z-10 mt-2 w-56 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none" 
-              role="menu" aria-orientation="vertical" aria-labelledby="menu-button" id="dropdown-menu">
-                <div className="py-1" role="none">
-                  <a href="#" className="block px-4 py-2 text-sm text-gray-700" 
-                  onClick={() => {setFlag(true)
-                  setDropdownOpen(false)}}
-                  role="menuitem" id="menu-item-0">View</a>
-                  <a href="#" className="block px-4 py-2 text-sm text-gray-700" 
-                  onClick={() => {setFlag(false)
-                  setDropdownOpen(false)}}
-                  role="menuitem" id="menu-item-1">Suggestion</a>
-                </div>
-              </div> }
-            </div> 
+
+            <HighlightDropDown 
+              onSelect={(isSuggestion) => setFlag(isSuggestion)}
+              isSuggestionMode={!flag}
+              disabled={user === undefined}
+            />
+
             <Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" 
               onClick={() => setState(prev => ({ ...prev, selectedId:undefined }))}
               disabled={state.selectedId?.mode !== "click"}>
